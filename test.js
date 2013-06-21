@@ -85,6 +85,21 @@ describe("mask.Mask", function () {
         });
       });
     };
-    assertCollidesWithSelf("test-data/bullet-ascii.pbm");
+    function assertDoesNotCollideWithTranslatedSelf (path) {
+      it("says" + path + "doesn't collide with itself, translated",
+         function (done) {
+           readToArrayBuffer(path, function (ab) {
+             mask.Mask.fromPBM(ab, function (m) {
+               var o = m.at(m.size.x, m.size.y);
+               assert.equal(mask.Mask.collision(m, o), false);
+               done();
+             });
+           });
+         });
+    };
+    pbm.forEach(function (img) {
+      assertCollidesWithSelf(img);
+      assertDoesNotCollideWithTranslatedSelf(img);
+    });
   });
 });
