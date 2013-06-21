@@ -68,13 +68,13 @@ var mask = (function () {
         break;
       };
     };
-    for (index; index < bytes.byteLength; i++) {
+    for (index; index < bytes.byteLength; index++) {
       switch (bytes[index]) {
       case '0'.charCodeAt(0):
-        bits.push(False);
+        bits.push(false);
         break;
       case '1'.charCodeAt(0):
-        bits.push(True);
+        bits.push(true);
         break;
       };
     };
