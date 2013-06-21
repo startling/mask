@@ -6,7 +6,7 @@ IMAGES= $(patsubst test-data/%.bmp,\
 	$(wildcard test-data/*.bmp))
 
 test: $(IMAGES)
-	mocha -R spec
+	mocha
 
 test-data/%-binary.pbm: test-data/%.bmp
 	bmptoppm $^ | pamditherbw | pamtopnm > $@
