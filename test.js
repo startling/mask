@@ -49,6 +49,30 @@ describe("mask.Mask", function () {
       assertReads(img);
       assertSize(img, 10, 10);
     });
+    function assertDataEqual (a, b) {
+      it("gets the same data for " + a + " and " + b, function (done) {
+        readToArrayBuffer(a, function (abA) {
+          mask.Mask.fromPBM(abA, function (maskA) {
+            readToArrayBuffer(b, function (abB) {
+              mask.Mask.fromPBM(abB, function (maskB) {
+                assert.equal(maskA.size.x, maskB.size.x);
+                assert.equal(maskA.size.y, maskB.size.y);
+                for (var x = 0; x < maskA.size.x; x++) {
+                  for (var y = 0; y < maskA.size.y; y++) {
+                    assert.equal(maskA.data[x][y], maskB.data[x][y]);
+                  };
+                };
+                done();
+              });
+            });
+          });
+        });
+      });
+    };
+    assertDataEqual("test-data/bullet-binary.pbm",
+                    "test-data/bullet-ascii.pbm");
+    assertDataEqual("test-data/frame-binary.pbm",
+                    "test-data/frame-ascii.pbm");
   });
   describe("#collidesWith()", function () {
     function assertCollidesWithSelf (path) {
