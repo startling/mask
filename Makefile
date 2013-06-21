@@ -19,3 +19,5 @@ test-data/%-ascii.pbm: test-data/%.png
 
 clean:
 	rm -f $(IMAGES)
+
+.PHONY: test lint clean
