@@ -100,10 +100,20 @@ describe("mask.Mask", function () {
          });
     };
     function assertDoesNotCollide(a, b) {
-      it("says that " + a + " and " + b + " collide.", function (done) {
+      it("says that " + a + " and " + b + " collide", function (done) {
         readMask(a, function (maskA) {
           readMask(b, function (maskB) {
             assert.equal(mask.Mask.collision(maskA, maskB), false);
+            done();
+          });
+        });
+      });
+    };
+    function assertNotWithin(a, b) {
+      it("says that " + a + " is not within " + b, function (done) {
+        readMask(a, function (maskA) {
+          readMask(b, function (maskB) {
+            assert.equal(mask.Mask.within(maskA, maskB), false);
             done();
           });
         });
@@ -116,5 +126,7 @@ describe("mask.Mask", function () {
     });
     assertDoesNotCollide("test-data/frame-ascii.pbm",
                          "test-data/bullet-binary.pbm");
+    assertNotWithin("test-data/frame-ascii.pbm",
+                    "test-data/bullet-binary.pbm");
   });
 });
