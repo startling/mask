@@ -165,17 +165,21 @@ var mask = (function () {
   };
   /* Test whether two Masks collide. */
   Mask.collision = function (a, b) {
-    var smallerX = a.size.x <= b.size.x ? a.size.x : b.size.x;
-    var smallerY = a.size.y <= b.size.y ? a.size.y : b.size.y;
-    for (var x = 0; x < smallerX; x++) {
-      for (var y = 0; y < smallerY; y++) {
-        if (a.data[x][y] && b.data[x][y]) {
-          return true;
+    var diff = {x: a.translation.x - b.translation.x,
+                y: a.translation.y - b.translation.y };
+    for (var x = 0; x < a.size.x; x++) {
+      for (var y = 0; y < a.size.y; y++) {
+        if (a.data[x][y]) {
+          var forB = {x: x + diff.x, y: y + diff.y};
+          if (b.data[forB.x] && b.data[forB.x][forB.y]) {
+            return true;
+          };
         };
       };
     };
     return false;
   };
+    
   return {
     Mask: Mask,
   };
