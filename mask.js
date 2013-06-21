@@ -26,12 +26,15 @@ var mask = (function () {
           return Mask.from_ascii_pbm(bytes, callback, err);
         } else {
           /* Unknown signature. */
+          throw new Error("Unknown or unsupported PBM signature.");
         };
       } else {
         /* Unknown signature. */
+        throw new Error("Unknown or unsupported PBM signature.");
       };
     } else {
       /* File two short. */
+      throw new Error("Invalid PBM image.");
     };
   };
   /* Create a Mask from an Uint8Array taken semantically as an
@@ -72,6 +75,7 @@ var mask = (function () {
     mask.size.y = parseInt(height);
     if (bits.length !== mask.size.x * mask.size.y) {
       /* Not enough data. */
+      throw new Error("Invalid PBM image.");
     } else {
       mask.data = bits;
       return callback(mask);
@@ -86,6 +90,7 @@ var mask = (function () {
         from_bm(req.response, callback);
       } else {
         /* No response. */
+        throw new Error("No response.");
       };
     };              
   };
