@@ -111,6 +111,16 @@ describe("mask.Mask", function () {
         });
       });
     };
+    function assertWithin(a, b) {
+      it("says that " + a + " is within " + b, function (done) {
+        readMask(a, function (maskA) {
+          readMask(b, function (maskB) {
+            assert.equal(mask.Mask.within(maskA, maskB), true);
+            done();
+          });
+        });
+      });
+    };
     function assertNotWithin(a, b) {
       it("says that " + a + " is not within " + b, function (done) {
         readMask(a, function (maskA) {
@@ -125,6 +135,7 @@ describe("mask.Mask", function () {
       assertCollidesWithSelf(img);
       assertWithinSelf(img);
       assertDoesNotCollideWithTranslatedSelf(img);
+      assertWithin(img, "test-data/solid-binary.pbm");
     });
     assertDoesNotCollide("test-data/frame-ascii.pbm",
                          "test-data/bullet-binary.pbm");
