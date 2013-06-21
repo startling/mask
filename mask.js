@@ -157,13 +157,13 @@ var mask = (function () {
     var height = accumulateRegex(/\d/, bytes, state).join("");
     skipRegex(/\s/, bytes, state);
     // Create a mask.
-    var mask = new mask();
-    mask.size.x = parseInt(width, 10);
-    mask.size.y = parseInt(height, 10);
+    var m = new mask();
+    m.size.x = parseInt(width, 10);
+    m.size.y = parseInt(height, 10);
     // Read 0 and 1 until the end of the file, skipping everything else.
     for (; state.index < bytes.byteLength; state.index++) {
       function add (x) {
-        if (!bits.length || bits[bits.length - 1].length === mask.size.x) {
+        if (!bits.length || bits[bits.length - 1].length === m.size.x) {
           bits.push([]);
         }
         bits[bits.length - 1].push(x);
@@ -179,8 +179,8 @@ var mask = (function () {
         break;
       }
     }
-    mask.data = bits;
-    return callback(mask);
+    m.data = bits;
+    return callback(m);
   };
   /* Create a `mask` from an Uint8Array taken semantically as an binary
    * PBM image.
@@ -201,27 +201,27 @@ var mask = (function () {
     var height = accumulateRegex(/\d/, bytes, state).join("");
     skipRegex(/\s/, bytes, state);
     // Create a mask.
-    var mask = new mask();
-    mask.size.x = parseInt(width, 10);
-    mask.size.y = parseInt(height, 10);
+    var m = new mask();
+    m.size.x = parseInt(width, 10);
+    m.size.y = parseInt(height, 10);
     // Read each byte, in sequence.
     for (; state.index < bytes.byteLength; state.index++) {
-      if (bits.length === mask.size.y - 1 &&
-          bits[bits.length - 1].length === mask.size.x - 1) {
+      if (bits.length === m.size.y - 1 &&
+          bits[bits.length - 1].length === m.size.x - 1) {
         break;
       }
-      else if (!bits.length || bits[bits.length - 1].length >= mask.size.x) {
+      else if (!bits.length || bits[bits.length - 1].length >= m.size.x) {
         bits.push([]);
       }
       for (var b = 0; b < 8; b++) {
-        if (bits[bits.length - 1].length < mask.size.x) {
+        if (bits[bits.length - 1].length < m.size.x) {
           var bit = Boolean((bytes[state.index] >> (7 - b)) & 0x01);
           bits[bits.length - 1].push(bit);
         }
       }
     }
-    mask.data = bits;
-    callback(mask);
+    m.data = bits;
+    callback(m);
   };
   /* Create a `mask` from a PBM image at some URL.
    *
