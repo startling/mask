@@ -9,7 +9,7 @@ var mask = (function () {
     this.data = null;
   };
   /* Make a clone of this Mask. */
-  Mask.__proto__.clone = function () {
+  Mask.prototype.clone = function () {
     var other = new Mask();
     other.translation.x = this.translation.x;
     other.translation.y = this.translation.y;
@@ -19,12 +19,12 @@ var mask = (function () {
     return other;
   };
   /* Translate this Mask in two dimensions. */
-  Mask.__proto__.translate = function (x, y) {
+  Mask.prototype.translate = function (x, y) {
     this.translation.x += x;
     this.translation.y += y;
   };
   /* Make a copy of this Mask translated to the coordinates given. */
-  Mask.__proto__.at = function (x, y) {
+  Mask.prototype.at = function (x, y) {
     var other = this.clone();
     other.translation = {x: x, y: y};
     return other;
