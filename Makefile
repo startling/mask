@@ -15,4 +15,4 @@ test-data/%-ascii.pbm: test-data/%.bmp
 	bmptoppm $^ | pamditherbw | pamtopnm -plain > $@
 
 clean:
-	rm -f test-data/*.pbm
+	rm -f $(IMAGES)
