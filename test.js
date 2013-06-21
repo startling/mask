@@ -1,5 +1,5 @@
 var assert = require("assert");
-var mask = require("../mask");
+var mask = require("./mask");
 
 describe("mask.Mask", function () {
   describe("#from_pbm()", function () {
