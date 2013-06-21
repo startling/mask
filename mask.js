@@ -94,6 +94,51 @@ var mask = (function () {
       return callback(mask);
     };
   };
+  /* Create a Mask from an Uint8Array taken semantically as an
+     binary PBM image. */
+  Mask.from_binary_pbm = function (bytes, callback) {
+    var bits = [];
+    var index = 2;
+    var width = "";
+    var height = "";
+    /* Skip all the whitespace after the signature. */
+    while (true) {
+      var char = String.fromCharCode(bytes[index]);
+      if (char.match(/\d/)) {
+        break;
+      } else {
+        index++;
+      };
+    };
+    /* Read numbers and stick them into 'width' until whitespace. */
+    while (true) {
+      var char = String.fromCharCode(bytes[index++]);
+      if (char.match(/\d/)) {
+        width += char;
+      } else {
+        break;
+      }
+    };
+    /* Read numbers and stick them into 'height' until whitespace. */
+    while (true) {
+      var char = String.fromCharCode(bytes[index++]);
+      if (char.match(/\d/)) {
+        height += char;
+      } else {
+        break;
+      };
+    };
+    /* Read each byte, in sequence. */
+    for (index; index < bytes.byteLength; index++) {
+      var byte = bytes[index];
+      /* TODO. */
+    };
+    /* Create a mask. */
+    var mask = new Mask();
+    mask.size.x = parseInt(width);
+    mask.size.y = parseInt(height);
+    callback(mask);
+  };
   Mask.from_pbm_url = function (url, callback) {
     var req = new XMLHttpRequest();
     req.open("GET", url, true);
