@@ -21,7 +21,7 @@ var mask = (function () {
         if (bytes[1] === '4'.charCodeAt(0)) {
           /* This is a PBM binary file... */
           return Mask.from_binary_pbm(bytes, callback);
-        } else if (bytes[1] == "1") {
+        } else if (bytes[1] == "1".charCodeAt(0)) {
           /* This is an ASCII binary file... */
           return Mask.from_ascii_pbm(bytes, callback, err);
         } else {
