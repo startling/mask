@@ -74,13 +74,23 @@ var Mask = (function () {
     }
     return accumulator;
   }
+  function skipPostSignature (bytes, state) {
+    skipRegex(/\s/, bytes, state);
+    var here = String.fromCharCode(bytes[state.index]);
+    while (here === '#') {
+      state.index++;
+      skipRegex(/[^\n]/, bytes, state);
+      skipRegex(/\s/, bytes, state);
+      here = String.fromCharCode(bytes[state.index]);
+    };
+  };
   /* Create a Mask from an Uint8Array taken semantically as an
      ASCII PBM image. */
   Mask.fromASCIIPBM = function (bytes, callback) {
     var bits = [];
     var state = {index: 2};
-    /* Skip all the whitespace after the signature. */
-    skipRegex(/\s/, bytes, state);
+    /* Skip the spaces and comments post-signature. */
+    skipPostSignature(bytes, state);
     /* Read numbers and stick them into 'width' until whitespace. */
     var width = accumulateRegex(/\d/, bytes, state).join("");
     skipRegex(/\s/, bytes, state);
@@ -118,8 +128,8 @@ var Mask = (function () {
   Mask.fromBinaryPBM = function (bytes, callback) {
      var bits = [];
     var state = {index: 2};
-    /* Skip all the whitespace after the signature. */
-    skipRegex(/\s/, bytes, state);
+    /* Skip the spaces and comments post-signature. */
+    skipPostSignature(bytes, state);
     /* Read numbers and stick them into 'width' until whitespace. */
     var width = accumulateRegex(/\d/, bytes, state).join("");
     skipRegex(/\s/, bytes, state);
