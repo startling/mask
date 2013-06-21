@@ -211,7 +211,6 @@ var mask = (function () {
     };
     return true;
   };
-    
   return {
     Mask: Mask,
   };

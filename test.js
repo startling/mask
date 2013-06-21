@@ -49,6 +49,7 @@ describe("mask.Mask", function () {
         });
       });
     };
+    /* We should be able to read each image and get its size correct. */
     pbm.forEach(function (img) {
       assertReads(img);
       assertSize(img, 10, 10);
@@ -69,6 +70,7 @@ describe("mask.Mask", function () {
         });
       });
     };
+    /* The binary and ascii variants of things should have equal data. */
     assertDataEqual("test-data/bullet-binary.pbm",
                     "test-data/bullet-ascii.pbm");
     assertDataEqual("test-data/frame-binary.pbm",
@@ -93,8 +95,18 @@ describe("mask.Mask", function () {
            });
          });
     };
-    function assertDoesNotCollide(a, b) {
+    function assertCollides(a, b) {
       it("says that " + a + " and " + b + " collide", function (done) {
+        readMask(a, function (maskA) {
+          readMask(b, function (maskB) {
+            assert.equal(mask.Mask.collision(maskA, maskB), true);
+            done();
+          });
+        });
+      });
+    };
+    function assertDoesNotCollide(a, b) {
+      it("says that " + a + " and " + b + "do not collide", function (done) {
         readMask(a, function (maskA) {
           readMask(b, function (maskB) {
             assert.equal(mask.Mask.collision(maskA, maskB), false);
@@ -103,10 +115,15 @@ describe("mask.Mask", function () {
         });
       });
     };
+    /* Every nonempty image should collide with itself;
+       every nonempty image should collide with the solid image;
+       every image should not collide with itself translated by its size. */
     pbm.forEach(function (img) {
       assertCollidesWithSelf(img);
+      assertCollides(img, "test-data/solid-binary.pbm");
       assertDoesNotCollideWithTranslatedSelf(img);
     });
+    /* The frame image and the bullet image should not collide. */
     assertDoesNotCollide("test-data/frame-ascii.pbm",
                          "test-data/bullet-binary.pbm");
   });
@@ -139,10 +156,12 @@ describe("mask.Mask", function () {
         });
       });
     };
+    /* Every image should be within itself and within the solid image. */
     pbm.forEach(function (img) {
       assertWithinSelf(img);
       assertWithin(img, "test-data/solid-binary.pbm");
     });
+    /* The frame image should not be within the bullet image. */
     assertNotWithin("test-data/frame-ascii.pbm",
                     "test-data/bullet-binary.pbm");
   });
