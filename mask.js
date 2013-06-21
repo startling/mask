@@ -82,8 +82,8 @@ var Mask = (function () {
       skipRegex(/[^\n]/, bytes, state);
       skipRegex(/\s/, bytes, state);
       here = String.fromCharCode(bytes[state.index]);
-    };
-  };
+    }
+  }
   /* Create a Mask from an Uint8Array taken semantically as an
      ASCII PBM image. */
   Mask.fromASCIIPBM = function (bytes, callback) {
