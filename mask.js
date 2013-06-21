@@ -149,6 +149,7 @@ var mask = (function () {
     mask.data = bits;
     callback(mask);
   };
+  /* Create a Mask from a PBM image at some URL. */
   Mask.fromPBMUrl = function (url, callback) {
     var req = new XMLHttpRequest();
     req.open("GET", url, true);
