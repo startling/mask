@@ -84,15 +84,15 @@ var mask = (function () {
           return mask.fromASCIIPBM(bytes, callback);
         } else {
           // Unknown signature.
-          throw new Error("Unknown or unsupported PBM signature.");
+          return callback(null, new Error("Unknown PBM signature."));
         }
       } else {
         // Unknown signature.
-        throw new Error("Unknown or unsupported PBM signature.");
+        return callback(null, new Error("Unknown PBM signature."));
       }
     } else {
       // File too short.
-      throw new Error("Invalid PBM image.");
+      return callback(null, Error("Invalid PBM image."));
     }
   };
   /* Skip every byte matching a regular expression.
@@ -242,11 +242,14 @@ var mask = (function () {
     req.responseType = "arraybuffer";
     req.onload = function (ev) {
       if (req.response) {
-        mask.fromPBM(req.response, callback);
+        return mask.fromPBM(req.response, callback);
       } else {
         // No response.
-        throw new Error("No response.");
+        return callback(null, new Error("No response."));
       }
+    };
+    req.onerror = function (e) {
+      return callback(null, e);
     };
     req.open("GET", url, true);
     req.send();
