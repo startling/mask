@@ -99,10 +99,22 @@ describe("mask.Mask", function () {
            });
          });
     };
+    function assertDoesNotCollide(a, b) {
+      it("says that " + a + " and " + b + " collide.", function (done) {
+        readMask(a, function (maskA) {
+          readMask(b, function (maskB) {
+            assert.equal(mask.Mask.collision(maskA, maskB), false);
+            done();
+          });
+        });
+      });
+    };
     pbm.forEach(function (img) {
       assertCollidesWithSelf(img);
       assertWithinSelf(img);
       assertDoesNotCollideWithTranslatedSelf(img);
     });
+    assertDoesNotCollide("test-data/frame-ascii.pbm",
+                         "test-data/bullet-binary.pbm");
   });
 });
