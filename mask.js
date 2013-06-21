@@ -210,4 +210,3 @@ var Mask = (function () {
   }
   return Mask;
 })();
-
