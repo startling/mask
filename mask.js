@@ -1,4 +1,4 @@
-var mask = (function () {
+var Mask = (function () {
   function Mask () {
     this.translation = {};
     this.translation.x = 0;
@@ -211,11 +211,9 @@ var mask = (function () {
     };
     return true;
   };
-  return {
-    Mask: Mask,
+  if (typeof module !== "undefined") {
+    module.exports = Mask;
   };
+  return Mask;
 })();
 
-if (typeof module !== "undefined") {
-  module.exports = mask;
-};
