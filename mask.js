@@ -129,15 +129,24 @@ var mask = (function () {
         break;
       };
     };
-    /* Read each byte, in sequence. */
-    for (index; index < bytes.byteLength; index++) {
-      var byte = bytes[index];
-      /* TODO. */
-    };
     /* Create a mask. */
     var mask = new Mask();
     mask.size.x = parseInt(width);
     mask.size.y = parseInt(height);
+    /* Read each byte, in sequence. */
+    for (index; index < bytes.byteLength; index++) {
+      var byte = bytes[index];
+      if (!bits.length || bits[bits.length - 1].length >= mask.size.x) {
+        bits.push([]);
+      };
+      for (var b = 0; b < 8; b++) {
+        if (bits[bits.length - 1].length < mask.size.x) {
+          var bit = Boolean((byte >> (7 - b)) & 0x01);
+          bits[bits.length - 1].push(bit);
+        };
+      };
+    };
+    mask.data = bits;
     callback(mask);
   };
   Mask.fromPBMUrl = function (url, callback) {
