@@ -74,12 +74,12 @@ describe("mask.Mask", function () {
     assertDataEqual("test-data/frame-binary.pbm",
                     "test-data/frame-ascii.pbm");
   });
-  describe("#collidesWith()", function () {
+  describe(".collidesWith()", function () {
     function assertCollidesWithSelf (path) {
       it ("says " + path + " collides with itself.", function (done) {
         readToArrayBuffer(path, function (ab) {
-          mask.Mask.fromPBM(ab, function (mask) {
-            assert.equal(mask.collidesWith(mask), true);
+          mask.Mask.fromPBM(ab, function (m) {
+            assert.equal(mask.Mask.collision(m, m), true);
             done();
           });
         });
