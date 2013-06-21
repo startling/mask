@@ -7,7 +7,7 @@ var Mask = (function () {
     this.size.x = 0;
     this.size.y = 0;
     this.data = null;
-  };
+  }
   /* Make a clone of this Mask. */
   Mask.prototype.clone = function () {
     var other = new Mask();
@@ -43,125 +43,105 @@ var Mask = (function () {
         } else {
           /* Unknown signature. */
           throw new Error("Unknown or unsupported PBM signature.");
-        };
+        }
       } else {
         /* Unknown signature. */
         throw new Error("Unknown or unsupported PBM signature.");
-      };
+      }
     } else {
       /* File two short. */
       throw new Error("Invalid PBM image.");
-    };
+    }
   };
+  /* Parsing utility functions. */
+  function skipRegex (regex, bytes, state) {
+    for (; state.index < bytes.byteLength; state.index++) {
+      var here = String.fromCharCode(bytes[state.index]);
+      if (!here.match(regex)) {
+        break;
+      }
+    }
+  }
+  function accumulateRegex (regex, bytes, state) {
+    var accumulator = [];
+    for (; state.index < bytes.byteLength; state.index++) {
+      var here = String.fromCharCode(bytes[state.index]);
+      if (here.match(regex)) {
+        accumulator.push(here);
+      } else {
+        break;
+      }
+    }
+    return accumulator;
+  }
   /* Create a Mask from an Uint8Array taken semantically as an
      ASCII PBM image. */
   Mask.fromASCIIPBM = function (bytes, callback) {
     var bits = [];
-    var index = 2;
-    var width = "";
-    var height = "";
+    var state = {index: 2};
     /* Skip all the whitespace after the signature. */
-    while (true) {
-      var char = String.fromCharCode(bytes[index]);
-      if (char.match(/\d/)) {
-        break;
-      } else {
-        index++;
-      };
-    };
+    skipRegex(/\s/, bytes, state);
     /* Read numbers and stick them into 'width' until whitespace. */
-    while (true) {
-      var char = String.fromCharCode(bytes[index++]);
-      if (char.match(/\d/)) {
-        width += char;
-      } else {
-        break;
-      }
-    };
+    var width = accumulateRegex(/\d/, bytes, state).join("");
+    skipRegex(/\s/, bytes, state);
     /* Read numbers and stick them into 'height' until whitespace. */
-    while (true) {
-      var char = String.fromCharCode(bytes[index++]);
-      if (char.match(/\d/)) {
-        height += char;
-      } else {
-        break;
-      };
-    };
+    var height = accumulateRegex(/\d/, bytes, state).join("");
+    skipRegex(/\s/, bytes, state);
     /* Create a mask. */
     var mask = new Mask();
-    mask.size.x = parseInt(width);
-    mask.size.y = parseInt(height);
+    mask.size.x = parseInt(width, 10);
+    mask.size.y = parseInt(height, 10);
     /* Read 0 and 1 until the end of the file, skipping everything else. */
-    for (index; index < bytes.byteLength; index++) {
+    for (; state.index < bytes.byteLength; state.index++) {
       function add (x) {
         if (!bits.length || bits[bits.length - 1].length === mask.size.x) {
           bits.push([]);
-        };
+        }
         bits[bits.length - 1].push(x);
-      };
-      switch (bytes[index]) {
+      }
+      switch (bytes[state.index]) {
       case '0'.charCodeAt(0):
         add(false);
         break;
       case '1'.charCodeAt(0):
         add(true);
         break;
-      };
-    };
+      default:
+        break;
+      }
+    }
     mask.data = bits;
     return callback(mask);
   };
   /* Create a Mask from an Uint8Array taken semantically as an
      binary PBM image. */
   Mask.fromBinaryPBM = function (bytes, callback) {
-    var bits = [];
-    var index = 2;
-    var width = "";
-    var height = "";
+     var bits = [];
+    var state = {index: 2};
     /* Skip all the whitespace after the signature. */
-    while (true) {
-      var char = String.fromCharCode(bytes[index]);
-      if (char.match(/\d/)) {
-        break;
-      } else {
-        index++;
-      };
-    };
+    skipRegex(/\s/, bytes, state);
     /* Read numbers and stick them into 'width' until whitespace. */
-    while (true) {
-      var char = String.fromCharCode(bytes[index++]);
-      if (char.match(/\d/)) {
-        width += char;
-      } else {
-        break;
-      }
-    };
+    var width = accumulateRegex(/\d/, bytes, state).join("");
+    skipRegex(/\s/, bytes, state);
     /* Read numbers and stick them into 'height' until whitespace. */
-    while (true) {
-      var char = String.fromCharCode(bytes[index++]);
-      if (char.match(/\d/)) {
-        height += char;
-      } else {
-        break;
-      };
-    };
+    var height = accumulateRegex(/\d/, bytes, state).join("");
+    skipRegex(/\s/, bytes, state);
     /* Create a mask. */
     var mask = new Mask();
-    mask.size.x = parseInt(width);
-    mask.size.y = parseInt(height);
+    mask.size.x = parseInt(width, 10);
+    mask.size.y = parseInt(height, 10);
     /* Read each byte, in sequence. */
-    for (index; index < bytes.byteLength; index++) {
-      var byte = bytes[index];
+    for (; state.index < bytes.byteLength; state.index++) {
       if (!bits.length || bits[bits.length - 1].length >= mask.size.x) {
         bits.push([]);
-      };
+      }
       for (var b = 0; b < 8; b++) {
         if (bits[bits.length - 1].length < mask.size.x) {
-          var bit = Boolean((byte >> (7 - b)) & 0x01);
+          var bit = Boolean((bytes[state.index] >> (7 - b)) & 0x01);
           bits[bits.length - 1].push(bit);
-        };
-      };
-    };
+        }
+      }
+    }
     mask.data = bits;
     callback(mask);
   };
@@ -176,8 +156,8 @@ var Mask = (function () {
       } else {
         /* No response. */
         throw new Error("No response.");
-      };
-    };              
+      }
+    };
   };
   /* Test whether two Masks collide. */
   Mask.collision = function (a, b) {
@@ -189,10 +169,10 @@ var Mask = (function () {
           var forB = {x: x + diff.x, y: y + diff.y};
           if (b.data[forB.x] && b.data[forB.x][forB.y]) {
             return true;
-          };
-        };
-      };
-    };
+          }
+        }
+      }
+    }
     return false;
   };
   /* Test whether a mask is completely contained within another. */
@@ -205,15 +185,15 @@ var Mask = (function () {
           var forB = {x: x + diff.x, y: y + diff.y};
           if (!(b.data[forB.x] && b.data[forB.x][forB.y])) {
             return false;
-          };
-        };
-      };
-    };
+          }
+        }
+      }
+    }
     return true;
   };
   if (typeof module !== "undefined") {
     module.exports = Mask;
-  };
+  }
   return Mask;
 })();
 
