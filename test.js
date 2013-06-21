@@ -74,19 +74,11 @@ describe("mask.Mask", function () {
     assertDataEqual("test-data/frame-binary.pbm",
                     "test-data/frame-ascii.pbm");
   });
-  describe(".collidesWith()", function () {
+  describe(".collision()", function () {
     function assertCollidesWithSelf (path) {
       it ("says " + path + " collides with itself", function (done) {
         readMask(path, function (m) {
           assert.equal(mask.Mask.collision(m, m), true);
-          done();
-        });
-      });
-    };
-    function assertWithinSelf (path) {
-      it ("says " + path + " is within itself", function (done) {
-        readMask(path, function (m) {
-          assert.equal(mask.Mask.within(m, m), true);
           done();
         });
       });
@@ -111,6 +103,22 @@ describe("mask.Mask", function () {
         });
       });
     };
+    pbm.forEach(function (img) {
+      assertCollidesWithSelf(img);
+      assertDoesNotCollideWithTranslatedSelf(img);
+    });
+    assertDoesNotCollide("test-data/frame-ascii.pbm",
+                         "test-data/bullet-binary.pbm");
+  });
+  describe(".within()", function () {
+    function assertWithinSelf (path) {
+      it ("says " + path + " is within itself", function (done) {
+        readMask(path, function (m) {
+          assert.equal(mask.Mask.within(m, m), true);
+          done();
+        });
+      });
+    };
     function assertWithin(a, b) {
       it("says that " + a + " is within " + b, function (done) {
         readMask(a, function (maskA) {
@@ -132,13 +140,9 @@ describe("mask.Mask", function () {
       });
     };
     pbm.forEach(function (img) {
-      assertCollidesWithSelf(img);
       assertWithinSelf(img);
-      assertDoesNotCollideWithTranslatedSelf(img);
       assertWithin(img, "test-data/solid-binary.pbm");
     });
-    assertDoesNotCollide("test-data/frame-ascii.pbm",
-                         "test-data/bullet-binary.pbm");
     assertNotWithin("test-data/frame-ascii.pbm",
                     "test-data/bullet-binary.pbm");
   });
