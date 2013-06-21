@@ -20,12 +20,18 @@ describe("mask.Mask", function () {
     it("exists", function () {
       assert.notEqual(mask.Mask.from_pbm, undefined);
     });
-    it("reads test-data/bullet-ascii.pbm.", function (done) {
-      readToArrayBuffer("test-data/bullet-ascii.pbm", function (ab) {
-        mask.Mask.from_pbm(ab, function (mask) {
-          done();
+    function assert_reads (path) {
+      it("reads " + path + ".", function (done) {
+        readToArrayBuffer(path, function (ab) {
+          mask.Mask.from_pbm(ab, function (mask) {
+            done();
+          });
         });
       });
-    });
+    };
+    assert_reads("test-data/bullet-ascii.pbm");
+    assert_reads("test-data/frame-ascii.pbm");
+    assert_reads("test-data/bullet-binary.pbm");
+    assert_reads("test-data/frame-binary.pbm");
   });
 });
