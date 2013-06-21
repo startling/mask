@@ -26,7 +26,7 @@ describe("mask.Mask", function () {
       assert.notEqual(mask.Mask.fromPBM, undefined);
     });
     function assertReads (path) {
-      it("reads " + path + ".", function (done) {
+      it("reads " + path, function (done) {
         readToArrayBuffer(path, function (ab) {
           mask.Mask.fromPBM(ab, function (mask) {
             done();
@@ -35,7 +35,7 @@ describe("mask.Mask", function () {
       });
     };
     function assertSize (path, width, height) {
-      it("gets the size of " + path + " right.", function (done) {
+      it("gets the size of " + path + " right", function (done) {
         readToArrayBuffer(path, function (ab) {
           mask.Mask.fromPBM(ab, function (mask) {
             assert.equal(mask.size.x, width);
@@ -76,7 +76,7 @@ describe("mask.Mask", function () {
   });
   describe(".collidesWith()", function () {
     function assertCollidesWithSelf (path) {
-      it ("says " + path + " collides with itself.", function (done) {
+      it ("says " + path + " collides with itself", function (done) {
         readToArrayBuffer(path, function (ab) {
           mask.Mask.fromPBM(ab, function (m) {
             assert.equal(mask.Mask.collision(m, m), true);
@@ -86,7 +86,7 @@ describe("mask.Mask", function () {
       });
     };
     function assertDoesNotCollideWithTranslatedSelf (path) {
-      it("says" + path + "doesn't collide with itself, translated",
+      it("says " + path + "doesn't collide with itself, translated",
          function (done) {
            readToArrayBuffer(path, function (ab) {
              mask.Mask.fromPBM(ab, function (m) {
