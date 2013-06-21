@@ -85,6 +85,16 @@ describe("mask.Mask", function () {
         });
       });
     };
+    function assertWithinSelf (path) {
+      it ("says " + path + " is within itself", function (done) {
+        readToArrayBuffer(path, function (ab) {
+          mask.Mask.fromPBM(ab, function (m) {
+            assert.equal(mask.Mask.within(m, m), true);
+            done();
+          });
+        });
+      });
+    };
     function assertDoesNotCollideWithTranslatedSelf (path) {
       it("says " + path + "doesn't collide with itself, translated",
          function (done) {
@@ -99,6 +109,7 @@ describe("mask.Mask", function () {
     };
     pbm.forEach(function (img) {
       assertCollidesWithSelf(img);
+      assertWithinSelf(img);
       assertDoesNotCollideWithTranslatedSelf(img);
     });
   });
