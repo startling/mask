@@ -78,7 +78,6 @@ describe("mask", function () {
     /* Make sure we read commented ASCII PBM correctly. */
     it("Reads commented ASCII PBM", function (done) {
       readMask("test-data/commented-ascii.pbm", function (m) {
-        console.log(m);
         assert.equal(m.size.x, 1);
         assert.equal(m.size.y, 1);
         done();
