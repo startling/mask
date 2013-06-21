@@ -1,18 +1,18 @@
-IMAGES= $(patsubst test-data/%.bmp,\
+IMAGES= $(patsubst test-data/%.png,\
 	test-data/%-binary.pbm,\
-	$(wildcard test-data/*.bmp))\
-	$(patsubst test-data/%.bmp,\
+	$(wildcard test-data/*.png))\
+	$(patsubst test-data/%.png,\
 	test-data/%-ascii.pbm,\
-	$(wildcard test-data/*.bmp))
+	$(wildcard test-data/*.png))
 
 test: $(IMAGES)
 	mocha
 
-test-data/%-binary.pbm: test-data/%.bmp
-	bmptoppm $^ | pamditherbw | pamtopnm > $@
+test-data/%-binary.pbm: test-data/%.png
+	pngtopnm $^ | pamditherbw | pamtopnm > $@
 
-test-data/%-ascii.pbm: test-data/%.bmp
-	bmptoppm $^ | pamditherbw | pamtopnm -plain > $@
+test-data/%-ascii.pbm: test-data/%.png
+	pngtopnm $^ | pamditherbw | pamtopnm -plain > $@
 
 clean:
 	rm -f $(IMAGES)
