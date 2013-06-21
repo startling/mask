@@ -21,23 +21,23 @@ var pbm = [ "test-data/bullet-ascii.pbm",
             "test-data/frame-binary.pbm" ];
 
 describe("mask.Mask", function () {
-  describe("#from_pbm()", function () {
+  describe("#fromPBM()", function () {
     it("exists.", function () {
-      assert.notEqual(mask.Mask.from_pbm, undefined);
+      assert.notEqual(mask.Mask.fromPBM, undefined);
     });
-    function assert_reads (path) {
+    function assertReads (path) {
       it("reads " + path + ".", function (done) {
         readToArrayBuffer(path, function (ab) {
-          mask.Mask.from_pbm(ab, function (mask) {
+          mask.Mask.fromPBM(ab, function (mask) {
             done();
           });
         });
       });
     };
-    function assert_size (path, width, height) {
+    function assertSize (path, width, height) {
       it("gets the size of " + path + " right.", function (done) {
         readToArrayBuffer(path, function (ab) {
-          mask.Mask.from_pbm(ab, function (mask) {
+          mask.Mask.fromPBM(ab, function (mask) {
             assert.equal(mask.size.x, width);
             assert.equal(mask.size.y, height);
             done();
@@ -46,8 +46,8 @@ describe("mask.Mask", function () {
       });
     };
     pbm.forEach(function (img) {
-      assert_reads(img);
-      assert_size(img, 10, 10);
+      assertReads(img);
+      assertSize(img, 10, 10);
     });
   });
 });

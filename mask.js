@@ -14,16 +14,16 @@ var mask = (function () {
     this.translation.y += y;
   };
   /* Create a Mask object from an ArrayBuffer taken as a PBM image. */
-  Mask.from_pbm = function (array, callback) {
+  Mask.fromPBM = function (array, callback) {
     var bytes = new Uint8Array(array);
     if (bytes.byteLength > 2) {
       if (bytes[0] === 'P'.charCodeAt(0)) {
         if (bytes[1] === '4'.charCodeAt(0)) {
           /* This is a PBM binary file... */
-          return Mask.from_binary_pbm(bytes, callback);
+          return Mask.fromBinaryPBM(bytes, callback);
         } else if (bytes[1] == "1".charCodeAt(0)) {
           /* This is an ASCII binary file... */
-          return Mask.from_ascii_pbm(bytes, callback);
+          return Mask.fromASCIIPBM(bytes, callback);
         } else {
           /* Unknown signature. */
           throw new Error("Unknown or unsupported PBM signature.");
@@ -39,7 +39,7 @@ var mask = (function () {
   };
   /* Create a Mask from an Uint8Array taken semantically as an
      ASCII PBM image. */
-  Mask.from_ascii_pbm = function (bytes, callback) {
+  Mask.fromASCIIPBM = function (bytes, callback) {
     var bits = [];
     var index = 2;
     var width = "";
@@ -96,7 +96,7 @@ var mask = (function () {
   };
   /* Create a Mask from an Uint8Array taken semantically as an
      binary PBM image. */
-  Mask.from_binary_pbm = function (bytes, callback) {
+  Mask.fromBinaryPBM = function (bytes, callback) {
     var bits = [];
     var index = 2;
     var width = "";
@@ -139,7 +139,7 @@ var mask = (function () {
     mask.size.y = parseInt(height);
     callback(mask);
   };
-  Mask.from_pbm_url = function (url, callback) {
+  Mask.fromPBMUrl = function (url, callback) {
     var req = new XMLHttpRequest();
     req.open("GET", url, true);
     req.responseType = "arraybuffer";
