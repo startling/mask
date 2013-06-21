@@ -15,6 +15,11 @@ function readToArrayBuffer (path, callback) {
   });
 };
 
+var pbm = [ "test-data/bullet-ascii.pbm",
+            "test-data/frame-ascii.pbm",
+            "test-data/bullet-binary.pbm",
+            "test-data/frame-binary.pbm" ];
+
 describe("mask.Mask", function () {
   describe("#from_pbm()", function () {
     it("exists.", function () {
@@ -29,9 +34,20 @@ describe("mask.Mask", function () {
         });
       });
     };
-    assert_reads("test-data/bullet-ascii.pbm");
-    assert_reads("test-data/frame-ascii.pbm");
-    assert_reads("test-data/bullet-binary.pbm");
-    assert_reads("test-data/frame-binary.pbm");
+    function assert_size (path, width, height) {
+      it("gets the size of " + path + " right.", function (done) {
+        readToArrayBuffer(path, function (ab) {
+          mask.Mask.from_pbm(ab, function (mask) {
+            assert.equal(mask.size.x, width);
+            assert.equal(mask.size.y, height);
+            done();
+          });
+        });
+      });
+    };
+    pbm.forEach(function (img) {
+      assert_reads(img);
+      assert_size(img, 10, 10);
+    });
   });
 });
