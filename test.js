@@ -50,4 +50,17 @@ describe("mask.Mask", function () {
       assertSize(img, 10, 10);
     });
   });
+  describe("#collidesWith()", function () {
+    function assertCollidesWithSelf (path) {
+      it ("says " + path + " collides with itself.", function (done) {
+        readToArrayBuffer(path, function (ab) {
+          mask.Mask.fromPBM(ab, function (mask) {
+            assert.equal(mask.collidesWith(mask), true);
+            done();
+          });
+        });
+      });
+    };
+    assertCollidesWithSelf("test-data/bullet-ascii.pbm");
+  });
 });
