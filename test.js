@@ -24,7 +24,9 @@ function readMask (path, callback) {
 var pbm = [ "test-data/bullet-ascii.pbm",
             "test-data/frame-ascii.pbm",
             "test-data/bullet-binary.pbm",
-            "test-data/frame-binary.pbm" ];
+            "test-data/frame-binary.pbm",
+            "test-data/solid-ascii.pbm",
+            "test-data/solid-binary.pbm" ];
 
 describe("mask.Mask", function () {
   describe("#fromPBM()", function () {
