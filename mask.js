@@ -231,7 +231,6 @@ var mask = (function () {
    */
   mask.fromPBMUrl = function (url, callback) {
     var req = new XMLHttpRequest();
-    req.open("GET", url, true);
     req.responseType = "arraybuffer";
     req.onload = function (ev) {
       if (req.response) {
@@ -241,6 +240,8 @@ var mask = (function () {
         throw new Error("No response.");
       }
     };
+    req.open("GET", url, true);
+    req.send();
   };
   /* Test whether two masks collide.
    *
