@@ -23,7 +23,7 @@ var mask = (function () {
           return Mask.from_binary_pbm(bytes, callback);
         } else if (bytes[1] == "1".charCodeAt(0)) {
           /* This is an ASCII binary file... */
-          return Mask.from_ascii_pbm(bytes, callback, err);
+          return Mask.from_ascii_pbm(bytes, callback);
         } else {
           /* Unknown signature. */
           throw new Error("Unknown or unsupported PBM signature.");
