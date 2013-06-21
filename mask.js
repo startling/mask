@@ -71,28 +71,29 @@ var mask = (function () {
         break;
       };
     };
-    /* Read 0 and 1 until the end of the file, skipping everything else. */
-    for (index; index < bytes.byteLength; index++) {
-      switch (bytes[index]) {
-      case '0'.charCodeAt(0):
-        bits.push(false);
-        break;
-      case '1'.charCodeAt(0):
-        bits.push(true);
-        break;
-      };
-    };
     /* Create a mask. */
     var mask = new Mask();
     mask.size.x = parseInt(width);
     mask.size.y = parseInt(height);
-    if (bits.length !== mask.size.x * mask.size.y) {
-      /* Not enough data. */
-      throw new Error("Invalid PBM image.");
-    } else {
-      mask.data = bits;
-      return callback(mask);
+    /* Read 0 and 1 until the end of the file, skipping everything else. */
+    for (index; index < bytes.byteLength; index++) {
+      function add (x) {
+        if (!bits.length || bits[bits.length - 1].length === mask.size.x) {
+          bits.push([]);
+        };
+        bits[bits.length - 1].push(x);
+      };
+      switch (bytes[index]) {
+      case '0'.charCodeAt(0):
+        add(false);
+        break;
+      case '1'.charCodeAt(0):
+        add(true);
+        break;
+      };
     };
+    mask.data = bits;
+    return callback(mask);
   };
   /* Create a Mask from an Uint8Array taken semantically as an
      binary PBM image. */
