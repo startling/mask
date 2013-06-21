@@ -45,7 +45,15 @@ var mask = (function () {
     var width = "";
     var height = "";
     while (true) {
-      var char = String.charCodeAt(bytes[index++]);
+      var char = String.fromCharCode(bytes[index]);
+      if (char.match(/\d/)) {
+        break;
+      } else {
+        index++;
+      };
+    };
+    while (true) {
+      var char = String.fromCharCode(bytes[index++]);
       if (char.match(/\d/)) {
         width += char;
       } else {
@@ -53,7 +61,7 @@ var mask = (function () {
       }
     };
     while (true) {
-      var char = String.charCodeAt(bytes[index]);
+      var char = String.fromCharCode(bytes[index++]);
       if (char.match(/\d/)) {
         height += char;
       } else {
