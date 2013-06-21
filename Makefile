@@ -8,6 +8,9 @@ IMAGES= $(patsubst test-data/%.png,\
 test: $(IMAGES)
 	mocha
 
+lint: $(wildcard *.js)
+	$(foreach file,$^,jsl -process $(file) -nologo;)
+
 test-data/%-binary.pbm: test-data/%.png
 	pngtopnm $^ | pamditherbw | pamtopnm > $@
 
