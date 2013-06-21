@@ -142,7 +142,11 @@ var Mask = (function () {
     mask.size.y = parseInt(height, 10);
     /* Read each byte, in sequence. */
     for (; state.index < bytes.byteLength; state.index++) {
-      if (!bits.length || bits[bits.length - 1].length >= mask.size.x) {
+      if (bits.length === mask.size.y - 1 &&
+          bits[bits.length - 1].length === mask.size.x - 1) {
+        break;
+      }
+      else if (!bits.length || bits[bits.length - 1].length >= mask.size.x) {
         bits.push([]);
       }
       for (var b = 0; b < 8; b++) {
