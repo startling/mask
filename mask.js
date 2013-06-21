@@ -44,6 +44,7 @@ var mask = (function () {
     var index = 2;
     var width = "";
     var height = "";
+    /* Skip all the whitespace after the signature. */
     while (true) {
       var char = String.fromCharCode(bytes[index]);
       if (char.match(/\d/)) {
@@ -52,6 +53,7 @@ var mask = (function () {
         index++;
       };
     };
+    /* Read numbers and stick them into 'width' until whitespace. */
     while (true) {
       var char = String.fromCharCode(bytes[index++]);
       if (char.match(/\d/)) {
@@ -60,6 +62,7 @@ var mask = (function () {
         break;
       }
     };
+    /* Read numbers and stick them into 'height' until whitespace. */
     while (true) {
       var char = String.fromCharCode(bytes[index++]);
       if (char.match(/\d/)) {
@@ -68,6 +71,7 @@ var mask = (function () {
         break;
       };
     };
+    /* Read 0 and 1 until the end of the file, skipping everything else. */
     for (index; index < bytes.byteLength; index++) {
       switch (bytes[index]) {
       case '0'.charCodeAt(0):
@@ -78,6 +82,7 @@ var mask = (function () {
         break;
       };
     };
+    /* Create a mask. */
     var mask = new Mask();
     mask.size.x = parseInt(width);
     mask.size.y = parseInt(height);
