@@ -9,10 +9,10 @@ test: $(IMAGES)
 	mocha -R spec
 
 test-data/%-binary.pbm: test-data/%.bmp
-	bmptoppm $^ | pamditherbw | pamtopnm -plain > $@
+	bmptoppm $^ | pamditherbw | pamtopnm > $@
 
 test-data/%-ascii.pbm: test-data/%.bmp
-	bmptoppm $^ | pamditherbw | pamtopnm > $@
+	bmptoppm $^ | pamditherbw | pamtopnm -plain > $@
 
 clean:
 	rm -f test-data/*.pbm
