@@ -17,7 +17,7 @@ function readToArrayBuffer (path, callback) {
 
 describe("mask.Mask", function () {
   describe("#from_pbm()", function () {
-    it("exists", function () {
+    it("exists.", function () {
       assert.notEqual(mask.Mask.from_pbm, undefined);
     });
     function assert_reads (path) {
