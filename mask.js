@@ -8,10 +8,26 @@ var mask = (function () {
     this.size.y = 0;
     this.data = null;
   };
+  /* Make a clone of this Mask. */
+  Mask.__proto__.clone = function () {
+    var other = new Mask();
+    other.translation.x = this.translation.x;
+    other.translation.y = this.translation.y;
+    other.size.x = this.size.x;
+    other.size.y = this.size.y;
+    other.data = this.data;
+    return other;
+  };
   /* Translate this Mask in two dimensions. */
   Mask.__proto__.translate = function (x, y) {
     this.translation.x += x;
     this.translation.y += y;
+  };
+  /* Make a copy of this Mask translated to the coordinates given. */
+  Mask.__proto__.at = function (x, y) {
+    var other = this.clone();
+    other.translation = {x: x, y: y};
+    return other;
   };
   /* Create a Mask object from an ArrayBuffer taken as a PBM image. */
   Mask.fromPBM = function (array, callback) {
