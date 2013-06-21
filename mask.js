@@ -195,6 +195,22 @@ var mask = (function () {
     };
     return false;
   };
+  /* Test whether a mask is completely contained within another. */
+  Mask.within = function (a, b) {
+    var diff = {x: a.translation.x - b.translation.x,
+                y: a.translation.y - b.translation.y };
+    for (var x = 0; x < a.size.x; x++) {
+      for (var y = 0; y < a.size.y; y++) {
+        if (a.data[x][y]) {
+          var forB = {x: x + diff.x, y: y + diff.y};
+          if (!(b.data[forB.x] && b.data[forB.x][forB.y])) {
+            return false;
+          };
+        };
+      };
+    };
+    return true;
+  };
     
   return {
     Mask: Mask,
