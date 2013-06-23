@@ -40,7 +40,7 @@ You probably want `mask.fromPBMUrl`, `mask.collision`, and
 `mask.within`. There are some just-alright [docs][]. The source is
 well-commented and not difficult; might as well take a look.
 
-[docs]: https://github.com/startling/mask
+[docs]: http://startling.github.io/mask/
 
 # how can I help?
 
