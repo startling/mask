@@ -5,7 +5,7 @@ IMAGES= $(patsubst test-data/%.png,\
 	test-data/%-ascii.pbm,\
 	$(wildcard test-data/*.png))
 
-test: $(IMAGES)
+test: $(IMAGES) mask.js test.js
 	mocha
 
 lint: $(wildcard *.js)
