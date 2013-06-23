@@ -1,0 +1,32 @@
+{
+  "name": "mask",
+  "version": "0.0.1",
+  "author": "startling <tdixon51793@gmail.com>",
+  "description": "Collision masks from PBM files for JavaScript.",
+  "contributors": [
+    {
+      "name": "startling",
+      "email": "tdixon51793@gmail.com"
+    }
+  ],
+  "scripts": {
+    "test": "make test"
+  },
+  "main": "./mask.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/startling/mask.git"
+  },
+  "keywords": [
+    "games",
+    "collision",
+    "sprites"
+  ],
+  "devDependencies": {
+    "mocha": "1.11.x"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.6"
+  }
+}
