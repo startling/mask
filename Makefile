@@ -11,6 +11,11 @@ test: $(IMAGES)
 lint: $(wildcard *.js)
 	$(foreach file,$^,jsl -process $(file) -nologo;)
 
+docs: doc.html
+
+doc.html: mask.js
+	dox-foundation < $< > $@
+
 test-data/%-binary.pbm: test-data/%.png
 	pngtopnm $^ | pamditherbw | pamtopnm > $@
 
@@ -20,4 +25,4 @@ test-data/%-ascii.pbm: test-data/%.png
 clean:
 	rm -f $(IMAGES)
 
-.PHONY: test lint clean
+.PHONY: test lint clean docs
