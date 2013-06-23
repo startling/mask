@@ -37,8 +37,10 @@ probably want something like
 # cool, how do I use this?
 
 You probably want `mask.fromPBMUrl`, `mask.collision`, and
-`mask.within`. The source is well-commented and not difficult; might
-as well take a look.
+`mask.within`. There are some just-alright [docs][]. The source is
+well-commented and not difficult; might as well take a look.
+
+[docs]: https://github.com/startling/mask
 
 # how can I help?
 
