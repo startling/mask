@@ -14,7 +14,7 @@ lint: $(wildcard *.js)
 docs: doc.html
 
 doc.html: mask.js
-	dox-foundation < $< > $@
+	dox-foundation -t "mask" < $< > $@
 
 test-data/%-binary.pbm: test-data/%.png
 	pngtopnm $^ | pamditherbw | pamtopnm > $@
