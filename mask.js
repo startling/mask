@@ -75,7 +75,7 @@ var mask = (function () {
     var other = this.clone();
     other.translate(x, y);
     return other;
-  }
+  };
   /** Some callbacks expect a `mask`.
    * @callback maskCallback
    * @param {mask} the collision map
