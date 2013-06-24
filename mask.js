@@ -1,3 +1,4 @@
+
 /* This is `mask`, a tiny MIT-licensed library providing collision masks
  * and thus pixel-perfect collision detection in JavaScript. Collision
  * masks are read from [PBM][] files. Check the [github][] page for more
@@ -42,8 +43,8 @@ var mask = (function () {
   /* Translate this `mask` in two dimensions.
    *
    * @this {mask}
-   * @param {Number} x x-coordinate
-   * @param {Number} y y-coordinate
+   * @param {Number} x x-distance
+   * @param {Number} y y-distancex
    * @api public
    */
   mask.prototype.translate = function (x, y) {
@@ -55,6 +56,7 @@ var mask = (function () {
    * @this {mask}
    * @param {Number} x x-coordinate
    * @param {Number} y y-coordinate
+   * @return {mask}
    * @api public
    */
   mask.prototype.at = function (x, y) {
@@ -62,6 +64,18 @@ var mask = (function () {
     other.translation = {x: x, y: y};
     return other;
   };
+  /* Mask a copy of this `mask` translated in two dimensions.
+   * @this {mask}
+   * @param {Number} x x-distance
+   * @param {Number} y y-distance
+   * @return {mask}
+   * @api public
+   */
+  mask.prototype.translated = function (x, y) {
+    var other = this.clone();
+    other.translate(x, y);
+    return other;
+  }
   /** Some callbacks expect a `mask`.
    * @callback maskCallback
    * @param {mask} the collision map
