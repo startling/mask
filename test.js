@@ -173,4 +173,28 @@ describe("mask", function () {
     assertNotWithin("test-data/frame-ascii.pbm",
                     "test-data/bullet-binary.pbm");
   });
+  describe("#framedBy()", function () {
+    function assertFramedByBoundingBox(a) {
+      it ("frames " + a + " by its bounding box", function (done) {
+        readMask(a, function (m) {
+          assert.equal(m.framedBy(m.x, m.y, m.w, m.h), true);
+          done();
+        });
+      });
+    }
+    function assertNotFramedByTranslatedBoundingBox(a) {
+      it ("does not frame " + a + " by its bounding box, translated",
+          function (done) {
+            readMask(a, function (m) {
+              assert.equal(m.framedBy(m.x + m.w, m.y + m.h, m.w, m.h),
+                           false);
+              done();
+        });
+      });
+    }
+    pbm.forEach(function (img) {
+      assertFramedByBoundingBox(img);
+      assertNotFramedByTranslatedBoundingBox(img);
+    });
+  });
 });
