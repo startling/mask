@@ -6,7 +6,7 @@
  * [github]: https://github.com/startling/mask
  * [PBM]: http://netpbm.sourceforge.net/doc/pbm.html
  */
-
+/*!*/
 var mask = (function () {
   /* Construct a `mask`.
    *
@@ -334,6 +334,7 @@ var mask = (function () {
     }
     return true;
   };
+  /*!*/
   if (typeof module !== "undefined") {
     module.exports = mask;
   }
