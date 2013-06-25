@@ -264,6 +264,20 @@ var mask = (function () {
     req.open("GET", url, true);
     req.send();
   };
+  /* Create an object representing the intersection of the bounding
+   * boxes of two objects.
+   *
+   * @api private
+   */
+  function intersection (a, b) {
+    var a_2 = {x: a.x + a.w, y: a.y + a.h};
+    var b_2 = {x: b.x + b.w, y: b.y + b.h};
+    var overlap = {x: a.x > b.x ? a.x : b.x,
+                   y: a.y > b.y ? a.y : b.y};
+    overlap.w = (a_2.x < b_2.x ? a_2.x : b_2.x) - overlap.x;
+    overlap.h = (a_2.y < b_2.y ? a_2.y : b_2.y) - overlap.y;
+    return overlap;
+  }
   /* Test whether two masks collide.
    *
    * @param {mask} a
@@ -271,15 +285,12 @@ var mask = (function () {
    * @api public
    */
   mask.collision = function (a, b) {
-    var diff = {x: a.x - b.x,
-                y: a.y - b.y };
-    for (var x = 0; x < a.w; x++) {
-      for (var y = 0; y < a.h; y++) {
-        if (a.data[x][y]) {
-          var forB = {x: x + diff.x, y: y + diff.y};
-          if (b.data[forB.x] && b.data[forB.x][forB.y]) {
-            return true;
-          }
+    var intersect = intersection(a, b);
+    for (var x = intersect.x; x < intersect.w; x++) {
+      for (var y = intersect.y; y < intersect.h; y++) {
+        if (a.data[x - a.x][y - a.y] &&
+            b.data[x - b.x][y - b.y]) {
+          return true;
         }
       }
     }
@@ -292,15 +303,12 @@ var mask = (function () {
    * @api public
    */
   mask.within = function (a, b) {
-    var diff = {x: a.x - b.x,
-                y: a.y - b.y };
-    for (var x = 0; x < a.w; x++) {
-      for (var y = 0; y < a.h; y++) {
-        if (a.data[x][y]) {
-          var forB = {x: x + diff.x, y: y + diff.y};
-          if (!(b.data[forB.x] && b.data[forB.x][forB.y])) {
-            return false;
-          }
+    var intersect = intersection(a, b);
+    for (var x = intersect.x; x < intersect.w; x++) {
+      for (var y = intersect.y; y < intersect.h; y++) {
+        if (a.data[x - a.x][y - a.y] &&
+            !(b.data[x - b.x][y - b.y])) {
+          return false;
         }
       }
     }
