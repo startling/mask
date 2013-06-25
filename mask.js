@@ -72,6 +72,25 @@ var mask = (function () {
     other.translate(x, y);
     return other;
   };
+  /* Test that a mask is completely within a box described by
+   * the coordinates of its top-left corner and its width and height.
+   *
+   * @this {mask}
+   * @param {Number} x the top left x-coordinate of the box
+   * @param {Number} y the top left y-coordinate of the box
+   * @param {Number} w the width of the box
+   * @param {Number} h the height of the box
+   * @return {Boolean}
+   * @api public
+   */
+  mask.prototype.framedBy = function (x, y, w, h) {
+    var intersect = intersection(this, {x: x, y: y, w: w, h: h});
+    return intersect.x === this.x &&
+      intersect.y === this.y &&
+      intersect.h === this.h &&
+      intersect.w === this.w;
+  }
+
   /** Some callbacks expect a `mask`.
    * @callback maskCallback
    * @param {mask} the collision map
