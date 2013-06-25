@@ -43,8 +43,8 @@ describe("mask", function () {
     function assertSize (path, width, height) {
       it("gets the size of " + path + " right", function (done) {
         readMask(path, function (mask) {
-          assert.equal(mask.size.x, width);
-          assert.equal(mask.size.y, height);
+          assert.equal(mask.w, width);
+          assert.equal(mask.h, height);
           done();
         });
       });
@@ -58,10 +58,10 @@ describe("mask", function () {
       it("gets the same data for " + a + " and " + b, function (done) {
         readMask(a, function (maskA) {
           readMask(b, function (maskB) {
-            assert.equal(maskA.size.x, maskB.size.x);
-            assert.equal(maskA.size.y, maskB.size.y);
-            for (var x = 0; x < maskA.size.x; x++) {
-              for (var y = 0; y < maskA.size.y; y++) {
+            assert.equal(maskA.w, maskB.w);
+            assert.equal(maskA.h, maskB.h);
+            for (var x = 0; x < maskA.w; x++) {
+              for (var y = 0; y < maskA.h; y++) {
                 assert.equal(maskA.data[x][y], maskB.data[x][y]);
               }
             }
@@ -78,8 +78,8 @@ describe("mask", function () {
     /* Make sure we read commented ASCII PBM correctly. */
     it("Reads commented ASCII PBM", function (done) {
       readMask("test-data/commented-ascii.pbm", function (m) {
-        assert.equal(m.size.x, 1);
-        assert.equal(m.size.y, 1);
+        assert.equal(m.w, 1);
+        assert.equal(m.h, 1);
         done();
       });
     });
@@ -97,7 +97,7 @@ describe("mask", function () {
       it("says " + path + "doesn't collide with itself, translated",
          function (done) {
            readMask(path, function (m) {
-             var o = m.at(m.size.x, m.size.y);
+             var o = m.at(m.w, m.h);
              assert.equal(mask.collision(m, o), false);
              done();
            });

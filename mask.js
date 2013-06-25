@@ -18,12 +18,7 @@ var mask = (function () {
    * @api public
    */
   function mask () {
-    this.translation = {};
-    this.translation.x = 0;
-    this.translation.y = 0;
-    this.size = {};
-    this.size.x = 0;
-    this.size.y = 0;
+    this.x = this.y = this.w = this.h = 0;
     this.data = null;
   }
   /* Make a clone of a `mask`.
@@ -33,10 +28,10 @@ var mask = (function () {
    */
   mask.prototype.clone = function () {
     var other = new mask();
-    other.translation.x = this.translation.x;
-    other.translation.y = this.translation.y;
-    other.size.x = this.size.x;
-    other.size.y = this.size.y;
+    other.x = this.x;
+    other.y = this.y;
+    other.w = this.w;
+    other.h = this.h;
     other.data = this.data;
     return other;
   };
@@ -48,8 +43,8 @@ var mask = (function () {
    * @api public
    */
   mask.prototype.translate = function (x, y) {
-    this.translation.x += x;
-    this.translation.y += y;
+    this.x += x;
+    this.y += y;
   };
   /* Make a copy of this `mask` translated to the coordinates given.
    *
@@ -61,7 +56,8 @@ var mask = (function () {
    */
   mask.prototype.at = function (x, y) {
     var other = this.clone();
-    other.translation = {x: x, y: y};
+    other.x = x;
+    other.y = y;
     return other;
   };
   /* Mask a copy of this `mask` translated in two dimensions.
@@ -180,12 +176,12 @@ var mask = (function () {
     skipRegex(/\s/, bytes, state);
     // Create a mask.
     var m = new mask();
-    m.size.x = parseInt(width, 10);
-    m.size.y = parseInt(height, 10);
+    m.w = parseInt(width, 10);
+    m.h = parseInt(height, 10);
     // Read 0 and 1 until the end of the file, skipping everything else.
     for (; state.index < bytes.byteLength; state.index++) {
       function add (x) {
-        if (!bits.length || bits[bits.length - 1].length === m.size.x) {
+        if (!bits.length || bits[bits.length - 1].length === m.w) {
           bits.push([]);
         }
         bits[bits.length - 1].push(x);
@@ -224,19 +220,19 @@ var mask = (function () {
     skipRegex(/\s/, bytes, state);
     // Create a mask.
     var m = new mask();
-    m.size.x = parseInt(width, 10);
-    m.size.y = parseInt(height, 10);
+    m.w = parseInt(width, 10);
+    m.h = parseInt(height, 10);
     // Read each byte, in sequence.
     for (; state.index < bytes.byteLength; state.index++) {
-      if (bits.length === m.size.y - 1 &&
-          bits[bits.length - 1].length === m.size.x - 1) {
+      if (bits.length === m.h - 1 &&
+          bits[bits.length - 1].length === m.w - 1) {
         break;
       }
-      else if (!bits.length || bits[bits.length - 1].length >= m.size.x) {
+      else if (!bits.length || bits[bits.length - 1].length >= m.w) {
         bits.push([]);
       }
       for (var b = 0; b < 8; b++) {
-        if (bits[bits.length - 1].length < m.size.x) {
+        if (bits[bits.length - 1].length < m.w) {
           var bit = Boolean((bytes[state.index] >> (7 - b)) & 0x01);
           bits[bits.length - 1].push(bit);
         }
@@ -275,10 +271,10 @@ var mask = (function () {
    * @api public
    */
   mask.collision = function (a, b) {
-    var diff = {x: a.translation.x - b.translation.x,
-                y: a.translation.y - b.translation.y };
-    for (var x = 0; x < a.size.x; x++) {
-      for (var y = 0; y < a.size.y; y++) {
+    var diff = {x: a.x - b.x,
+                y: a.y - b.y };
+    for (var x = 0; x < a.w; x++) {
+      for (var y = 0; y < a.h; y++) {
         if (a.data[x][y]) {
           var forB = {x: x + diff.x, y: y + diff.y};
           if (b.data[forB.x] && b.data[forB.x][forB.y]) {
@@ -296,10 +292,10 @@ var mask = (function () {
    * @api public
    */
   mask.within = function (a, b) {
-    var diff = {x: a.translation.x - b.translation.x,
-                y: a.translation.y - b.translation.y };
-    for (var x = 0; x < a.size.x; x++) {
-      for (var y = 0; y < a.size.y; y++) {
+    var diff = {x: a.x - b.x,
+                y: a.y - b.y };
+    for (var x = 0; x < a.w; x++) {
+      for (var y = 0; y < a.h; y++) {
         if (a.data[x][y]) {
           var forB = {x: x + diff.x, y: y + diff.y};
           if (!(b.data[forB.x] && b.data[forB.x][forB.y])) {
