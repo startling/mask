@@ -94,6 +94,7 @@ var mask = (function () {
   /** Some callbacks expect a `mask`.
    * @callback maskCallback
    * @param {mask} the collision map
+   * @api private
    */
   /* Create a `mask` object from an `ArrayBuffer` taken as a PBM image.
    *
