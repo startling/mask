@@ -1,4 +1,3 @@
-
 /* This is `mask`, a tiny MIT-licensed library providing collision masks
  * and thus pixel-perfect collision detection in JavaScript. Collision
  * masks are read from [PBM][] files. Check the [github][] page for more
