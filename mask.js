@@ -6,27 +6,27 @@
  * [PBM]: http://netpbm.sourceforge.net/doc/pbm.html
  */
 /*!*/
-var mask = (function () {
-  /* Construct a `mask`.
+var Mask = (function () {
+  /* Construct a `Mask`.
    *
    * Examples:
    * 
-   *     new mask()
+   *     new Mask()
    *
    * @constructor
    * @api public
    */
-  function mask () {
+  function Mask () {
     this.x = this.y = this.w = this.h = 0;
     this.data = null;
   }
-  /* Make a clone of a `mask`.
+  /* Make a clone of a `Mask`.
    *
-   * @this {mask}
+   * @this {Mask}
    * @api public
    */
-  mask.prototype.clone = function () {
-    var other = new mask();
+  Mask.prototype.clone = function () {
+    var other = new Mask();
     other.x = this.x;
     other.y = this.y;
     other.w = this.w;
@@ -34,47 +34,47 @@ var mask = (function () {
     other.data = this.data;
     return other;
   };
-  /* Translate this `mask` in two dimensions.
+  /* Translate this `Mask` in two dimensions.
    *
-   * @this {mask}
+   * @this {Mask}
    * @param {Number} x x-distance
    * @param {Number} y y-distancex
    * @api public
    */
-  mask.prototype.translate = function (x, y) {
+  Mask.prototype.translate = function (x, y) {
     this.x += x;
     this.y += y;
   };
-  /* Make a copy of this `mask` translated to the coordinates given.
+  /* Make a copy of this `Mask` translated to the coordinates given.
    *
-   * @this {mask}
+   * @this {Mask}
    * @param {Number} x x-coordinate
    * @param {Number} y y-coordinate
-   * @return {mask}
+   * @return {Mask}
    * @api public
    */
-  mask.prototype.at = function (x, y) {
+  Mask.prototype.at = function (x, y) {
     var other = this.clone();
     other.x = x;
     other.y = y;
     return other;
   };
-  /* Mask a copy of this `mask` translated in two dimensions.
-   * @this {mask}
+  /* Mask a copy of this `Mask` translated in two dimensions.
+   * @this {Mask}
    * @param {Number} x x-distance
    * @param {Number} y y-distance
-   * @return {mask}
+   * @return {Mask}
    * @api public
    */
-  mask.prototype.translated = function (x, y) {
+  Mask.prototype.translated = function (x, y) {
     var other = this.clone();
     other.translate(x, y);
     return other;
   };
-  /* Test that a mask is completely within a box described by
+  /* Test that a Mask is completely within a box described by
    * the coordinates of its top-left corner and its width and height.
    *
-   * @this {mask}
+   * @this {Mask}
    * @param {Number} x the top left x-coordinate of the box
    * @param {Number} y the top left y-coordinate of the box
    * @param {Number} w the width of the box
@@ -82,20 +82,20 @@ var mask = (function () {
    * @return {Boolean}
    * @api public
    */
-  mask.prototype.framedBy = function (x, y, w, h) {
+  Mask.prototype.framedBy = function (x, y, w, h) {
     var intersect = intersection(this, {x: x, y: y, w: w, h: h});
     return intersect.x === this.x &&
       intersect.y === this.y &&
       intersect.h === this.h &&
       intersect.w === this.w;
   }
-  /* Test whether a mask is completely contained within another.
+  /* Test whether a Mask is completely contained within another.
    *
-   * @this {mask}
-   * @param {mask} b The containing mask.
+   * @this {Mask}
+   * @param {Mask} b The containing Mask.
    * @api public
    */
-  mask.prototype.within = function (b) {
+  Mask.prototype.within = function (b) {
     var intersect = intersection(this, b);
     for (var x = intersect.x; x < intersect.w; x++) {
       for (var y = intersect.y; y < intersect.h; y++) {
@@ -107,27 +107,27 @@ var mask = (function () {
     }
     return true;
   };
-  /** Some callbacks expect a `mask`.
-   * @callback maskCallback
-   * @param {mask} the collision map
+  /** Some callbacks expect a `Mask`.
+   * @callback MaskCallback
+   * @param {Mask} the collision map
    * @api private
    */
-  /* Create a `mask` object from an `ArrayBuffer` taken as a PBM image.
+  /* Create a `Mask` object from an `ArrayBuffer` taken as a PBM image.
    *
    * @param {ArrayBuffer} array image data
-   * @param {maskCallback} callback
+   * @param {MaskCallback} callback
    * @api public
    */
-  mask.fromPBM = function (array, callback) {
+  Mask.fromPBM = function (array, callback) {
     var bytes = new Uint8Array(array);
     if (bytes.byteLength > 2) {
       if (bytes[0] === 'P'.charCodeAt(0)) {
         if (bytes[1] === '4'.charCodeAt(0)) {
           // This is a PBM binary file...
-          return mask.fromBinaryPBM(bytes, callback);
+          return Mask.fromBinaryPBM(bytes, callback);
         } else if (bytes[1] == "1".charCodeAt(0)) {
           // This is an ASCII binary file...
-          return mask.fromASCIIPBM(bytes, callback);
+          return Mask.fromASCIIPBM(bytes, callback);
         } else {
           // Unknown signature.
           return callback(null, new Error("Unknown PBM signature."));
@@ -194,13 +194,13 @@ var mask = (function () {
       here = String.fromCharCode(bytes[state.index]);
     }
   }
-  /* Create a mask from an Uint8Array taken semantically as an ASCII PBM image.
+  /* Create a Mask from an Uint8Array taken semantically as an ASCII PBM image.
    *
    * @param {Uint8Buffer} bytes PBM image data.
-   * @param {maskCallback} callback
+   * @param {MaskCallback} callback
    * @api public
    */
-  mask.fromASCIIPBM = function (bytes, callback) {
+  Mask.fromASCIIPBM = function (bytes, callback) {
     var bits = [];
     var state = {index: 2};
     // Skip the spaces and comments post-signature.
@@ -210,8 +210,8 @@ var mask = (function () {
     // Read numbers and stick them into 'height' until whitespace.
     var height = accumulateRegex(/\d/, bytes, state).join("");
     skipRegex(/\s/, bytes, state);
-    // Create a mask.
-    var m = new mask();
+    // Create a Mask.
+    var m = new Mask();
     m.w = parseInt(width, 10);
     m.h = parseInt(height, 10);
     // Read 0 and 1 until the end of the file, skipping everything else.
@@ -236,14 +236,14 @@ var mask = (function () {
     m.data = bits;
     return callback(m);
   };
-  /* Create a `mask` from an Uint8Array taken semantically as an binary
+  /* Create a `Mask` from an Uint8Array taken semantically as an binary
    * PBM image.
    *
    * @param {Uint8Buffer} bytes PBM image data.
-   * @param {maskCallback} callback
+   * @param {MaskCallback} callback
    * @api public
    */
-  mask.fromBinaryPBM = function (bytes, callback) {
+  Mask.fromBinaryPBM = function (bytes, callback) {
      var bits = [];
     var state = {index: 2};
     // Skip the spaces and comments post-signature.
@@ -254,8 +254,8 @@ var mask = (function () {
     // Read numbers and stick them into 'height' until whitespace.
     var height = accumulateRegex(/\d/, bytes, state).join("");
     skipRegex(/\s/, bytes, state);
-    // Create a mask.
-    var m = new mask();
+    // Create a Mask.
+    var m = new Mask();
     m.w = parseInt(width, 10);
     m.h = parseInt(height, 10);
     // Read each byte, in sequence.
@@ -277,18 +277,18 @@ var mask = (function () {
     m.data = bits;
     callback(m);
   };
-  /* Create a `mask` from a PBM image at some URL.
+  /* Create a `Mask` from a PBM image at some URL.
    *
    * @param {String} url A URL pointing to a PBM image.
-   * @param {maskCallback} callback
+   * @param {MaskCallback} callback
    * @api public
    */
-  mask.fromPBMUrl = function (url, callback) {
+  Mask.fromPBMUrl = function (url, callback) {
     var req = new XMLHttpRequest();
     req.responseType = "arraybuffer";
     req.onload = function (ev) {
       if (req.response) {
-        return mask.fromPBM(req.response, callback);
+        return Mask.fromPBM(req.response, callback);
       } else {
         // No response.
         return callback(null, new Error("No response."));
@@ -314,13 +314,13 @@ var mask = (function () {
     overlap.h = (a_2.y < b_2.y ? a_2.y : b_2.y) - overlap.y;
     return overlap;
   }
-  /* Test whether two masks collide.
+  /* Test whether two Masks collide.
    *
-   * @param {mask} a
-   * @param {mask} b
+   * @param {Mask} a
+   * @param {Mask} b
    * @api public
    */
-  mask.collision = function (a, b) {
+  Mask.collision = function (a, b) {
     var intersect = intersection(a, b);
     for (var x = intersect.x; x < intersect.w; x++) {
       for (var y = intersect.y; y < intersect.h; y++) {
@@ -334,7 +334,7 @@ var mask = (function () {
   };
   /*!*/
   if (typeof module !== "undefined") {
-    module.exports = mask;
+    module.exports = { Mask: Mask };
   }
-  return mask;
+  return Mask;
 })();

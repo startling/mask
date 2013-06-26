@@ -1,6 +1,6 @@
 var fs = require("fs");
 var assert = require("assert");
-var mask = require("./mask");
+var Mask = require("./mask").Mask;
 
 function readToArrayBuffer (path, callback) {
   var rs = fs.createReadStream(path);
@@ -17,7 +17,7 @@ function readToArrayBuffer (path, callback) {
 
 function readMask (path, callback) {
   return readToArrayBuffer (path, function (ab) {
-    return mask.fromPBM(ab, callback);
+    return Mask.fromPBM(ab, callback);
   });
 }
 
@@ -28,23 +28,23 @@ var pbm = [ "test-data/bullet-ascii.pbm",
             "test-data/solid-ascii.pbm",
             "test-data/solid-binary.pbm" ];
 
-describe("mask", function () {
+describe("Mask", function () {
   describe("#fromPBM()", function () {
     it("exists.", function () {
-      assert.notEqual(mask.fromPBM, undefined);
+      assert.notEqual(Mask.fromPBM, undefined);
     });
     function assertReads (path) {
       it("reads " + path, function (done) {
-        readMask(path, function (mask) {
+        readMask(path, function (Mask) {
           done();
         });
       });
     }
     function assertSize (path, width, height) {
       it("gets the size of " + path + " right", function (done) {
-        readMask(path, function (mask) {
-          assert.equal(mask.w, width);
-          assert.equal(mask.h, height);
+        readMask(path, function (Mask) {
+          assert.equal(Mask.w, width);
+          assert.equal(Mask.h, height);
           done();
         });
       });
@@ -88,7 +88,7 @@ describe("mask", function () {
     function assertCollidesWithSelf (path) {
       it ("says " + path + " collides with itself", function (done) {
         readMask(path, function (m) {
-          assert.equal(mask.collision(m, m), true);
+          assert.equal(Mask.collision(m, m), true);
           done();
         });
       });
@@ -98,7 +98,7 @@ describe("mask", function () {
          function (done) {
            readMask(path, function (m) {
              var o = m.at(m.w, m.h);
-             assert.equal(mask.collision(m, o), false);
+             assert.equal(Mask.collision(m, o), false);
              done();
            });
          });
@@ -107,7 +107,7 @@ describe("mask", function () {
       it("says that " + a + " and " + b + " collide", function (done) {
         readMask(a, function (maskA) {
           readMask(b, function (maskB) {
-            assert.equal(mask.collision(maskA, maskB), true);
+            assert.equal(Mask.collision(maskA, maskB), true);
             done();
           });
         });
@@ -117,7 +117,7 @@ describe("mask", function () {
       it("says that " + a + " and " + b + "do not collide", function (done) {
         readMask(a, function (maskA) {
           readMask(b, function (maskB) {
-            assert.equal(mask.collision(maskA, maskB), false);
+            assert.equal(Mask.collision(maskA, maskB), false);
             done();
           });
         });
