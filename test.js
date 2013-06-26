@@ -139,7 +139,7 @@ describe("mask", function () {
     function assertWithinSelf (path) {
       it ("says " + path + " is within itself", function (done) {
         readMask(path, function (m) {
-          assert.equal(mask.within(m, m), true);
+          assert.equal(m.within(m), true);
           done();
         });
       });
@@ -148,7 +148,7 @@ describe("mask", function () {
       it("says that " + a + " is within " + b, function (done) {
         readMask(a, function (maskA) {
           readMask(b, function (maskB) {
-            assert.equal(mask.within(maskA, maskB), true);
+            assert.equal(maskA.within(maskB), true);
             done();
           });
         });
@@ -158,7 +158,7 @@ describe("mask", function () {
       it("says that " + a + " is not within " + b, function (done) {
         readMask(a, function (maskA) {
           readMask(b, function (maskB) {
-            assert.equal(mask.within(maskA, maskB), false);
+            assert.equal(maskA.within(maskB), false);
             done();
           });
         });

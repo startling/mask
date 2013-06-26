@@ -89,7 +89,24 @@ var mask = (function () {
       intersect.h === this.h &&
       intersect.w === this.w;
   }
-
+  /* Test whether a mask is completely contained within another.
+   *
+   * @this {mask}
+   * @param {mask} b The containing mask.
+   * @api public
+   */
+  mask.prototype.within = function (b) {
+    var intersect = intersection(this, b);
+    for (var x = intersect.x; x < intersect.w; x++) {
+      for (var y = intersect.y; y < intersect.h; y++) {
+        if (this.data[x - this.x][y - this.y] &&
+            !(b.data[x - b.x][y - b.y])) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
   /** Some callbacks expect a `mask`.
    * @callback maskCallback
    * @param {mask} the collision map
@@ -314,24 +331,6 @@ var mask = (function () {
       }
     }
     return false;
-  };
-  /* Test whether a mask is completely contained within another.
-   *
-   * @param {mask} a The contained mask.
-   * @param {mask} b The containing mask.
-   * @api public
-   */
-  mask.within = function (a, b) {
-    var intersect = intersection(a, b);
-    for (var x = intersect.x; x < intersect.w; x++) {
-      for (var y = intersect.y; y < intersect.h; y++) {
-        if (a.data[x - a.x][y - a.y] &&
-            !(b.data[x - b.x][y - b.y])) {
-          return false;
-        }
-      }
-    }
-    return true;
   };
   /*!*/
   if (typeof module !== "undefined") {
