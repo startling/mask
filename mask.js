@@ -99,13 +99,24 @@ var Mask = (function () {
     var intersect = intersection(this, b);
     for (var x = intersect.x; x < intersect.w; x++) {
       for (var y = intersect.y; y < intersect.h; y++) {
-        if (this.data[x - this.x][y - this.y] &&
-            !(b.data[x - b.x][y - b.y])) {
+        if (this.collidesAt(x, y) &&
+            !b.collidesAt(x, y)) {
           return false;
         }
       }
     }
     return true;
+  };
+  /* Test whether this mask collides at the given location.
+   *
+   * @this {Mask}
+   * @param {Number} x x-coordinate
+   * @param {Number} y y-coordinate
+   * @return {Mask}
+   * @api public
+   */
+  Mask.prototype.collidesAt = function (x, y) {
+    return this.data[x - this.x][y - this.y];
   };
   /** Some callbacks expect a `Mask`.
    * @callback MaskCallback
@@ -324,9 +335,8 @@ var Mask = (function () {
     var intersect = intersection(a, b);
     for (var x = intersect.x; x < intersect.w; x++) {
       for (var y = intersect.y; y < intersect.h; y++) {
-        if (a.data[x - a.x][y - a.y] &&
-            b.data[x - b.x][y - b.y]) {
-          return true;
+        if (a.collidesAt(x, y)) {
+          return b.collidesAt(x, y);
         }
       }
     }
