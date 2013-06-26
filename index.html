@@ -17,7 +17,7 @@ code {
   div.description {margin: 14px 0; padding-top: 14px; border-top:1px solid #eee; border-bottom:1px solid #eee; }
   .tags {}
     .tags .types {color:#666}
-.ctx-type { float:right; margin-top:8px }</style></head><body><div class="row"><div class="twelve columns"><h1 class="pagetitle">mask</h1></div></div><div class="row"><div id="nav" class="three columns"><ul class="side-nav"><li><a href="#mask">mask</a></li><li><a href="#clone">clone</a></li><li><a href="#translate">translate</a></li><li><a href="#at">at</a></li><li><a href="#translated">translated</a></li><li><a href="#framedBy">framedBy</a></li><li><a href="#fromPBM">fromPBM</a></li><li><a href="#fromASCIIPBM">fromASCIIPBM</a></li><li><a href="#fromBinaryPBM">fromBinaryPBM</a></li><li><a href="#fromPBMUrl">fromPBMUrl</a></li><li><a href="#collision">collision</a></li><li><a href="#within">within</a></li></ul></div><div class="nine columns"><div class="comment"><div class="tags"><ul class="no-bullet"></ul></div><div class="description"><p>This is <code>mask</code>, a tiny MIT-licensed library providing collision masks<br />and thus pixel-perfect collision detection in JavaScript. Collision<br />masks are read from <a href="http://netpbm.sourceforge.net/doc/pbm.html">PBM</a> files. Check the <a href="https://github.com/startling/mask">github</a> page for more<br />information.</p></div></div><div class="comment"><div class="label radius ctx-type">function</div><h1 id="mask">mask</h1><h5 class="subheader">mask()</h5><div class="tags"><ul class="no-bullet"><li><strong>@constructor: </strong></li></ul></div><div class="description"><p>Construct a <code>mask</code>.</p>
+.ctx-type { float:right; margin-top:8px }</style></head><body><div class="row"><div class="twelve columns"><h1 class="pagetitle">mask</h1></div></div><div class="row"><div id="nav" class="three columns"><ul class="side-nav"><li><a href="#mask">mask</a></li><li><a href="#clone">clone</a></li><li><a href="#translate">translate</a></li><li><a href="#at">at</a></li><li><a href="#translated">translated</a></li><li><a href="#framedBy">framedBy</a></li><li><a href="#within">within</a></li><li><a href="#fromPBM">fromPBM</a></li><li><a href="#fromASCIIPBM">fromASCIIPBM</a></li><li><a href="#fromBinaryPBM">fromBinaryPBM</a></li><li><a href="#fromPBMUrl">fromPBMUrl</a></li><li><a href="#collision">collision</a></li></ul></div><div class="nine columns"><div class="comment"><div class="tags"><ul class="no-bullet"></ul></div><div class="description"><p>This is <code>mask</code>, a tiny MIT-licensed library providing collision masks<br />and thus pixel-perfect collision detection in JavaScript. Collision<br />masks are read from <a href="http://netpbm.sourceforge.net/doc/pbm.html">PBM</a> files. Check the <a href="https://github.com/startling/mask">github</a> page for more<br />information.</p></div></div><div class="comment"><div class="label radius ctx-type">function</div><h1 id="mask">mask</h1><h5 class="subheader">mask()</h5><div class="tags"><ul class="no-bullet"><li><strong>@constructor: </strong></li></ul></div><div class="description"><p>Construct a <code>mask</code>.</p>
 
 <h2>Examples</h2>
 
@@ -51,7 +51,18 @@ code {
       intersect.y === this.y &amp;&amp;
       intersect.h === this.h &amp;&amp;
       intersect.w === this.w;
-  }</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="fromPBM">fromPBM</h1><h5 class="subheader">mask.fromPBM()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {ArrayBuffer} </span><span class="name">array </span><span class="description">image data</span></li><li><strong>@param: </strong><span class="types"> {maskCallback} </span><span class="name">callback </span></li></ul></div><div class="description"><p>Create a <code>mask</code> object from an <code>ArrayBuffer</code> taken as a PBM image.</p></div><pre><code class="language-javascript">mask.fromPBM = function (array, callback) {
+  }</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="within">within</h1><h5 class="subheader">mask.prototype.within()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{mask}</span></li><li><strong>@param: </strong><span class="types"> {mask} </span><span class="name">b </span><span class="description">The containing mask.</span></li></ul></div><div class="description"><p>Test whether a mask is completely contained within another.</p></div><pre><code class="language-javascript">mask.prototype.within = function (b) {
+    var intersect = intersection(this, b);
+    for (var x = intersect.x; x &lt; intersect.w; x++) {
+      for (var y = intersect.y; y &lt; intersect.h; y++) {
+        if (this.data[x - this.x][y - this.y] &amp;&amp;
+            !(b.data[x - b.x][y - b.y])) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="fromPBM">fromPBM</h1><h5 class="subheader">mask.fromPBM()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {ArrayBuffer} </span><span class="name">array </span><span class="description">image data</span></li><li><strong>@param: </strong><span class="types"> {maskCallback} </span><span class="name">callback </span></li></ul></div><div class="description"><p>Create a <code>mask</code> object from an <code>ArrayBuffer</code> taken as a PBM image.</p></div><pre><code class="language-javascript">mask.fromPBM = function (array, callback) {
     var bytes = new Uint8Array(array);
     if (bytes.byteLength &gt; 2) {
       if (bytes[0] === 'P'.charCodeAt(0)) {
@@ -168,17 +179,6 @@ code {
       }
     }
     return false;
-  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="within">within</h1><h5 class="subheader">mask.within()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {mask} </span><span class="name">a </span><span class="description">The contained mask.</span></li><li><strong>@param: </strong><span class="types"> {mask} </span><span class="name">b </span><span class="description">The containing mask.</span></li></ul></div><div class="description"><p>Test whether a mask is completely contained within another.</p></div><pre><code class="language-javascript">mask.within = function (a, b) {
-    var intersect = intersection(a, b);
-    for (var x = intersect.x; x &lt; intersect.w; x++) {
-      for (var y = intersect.y; y &lt; intersect.h; y++) {
-        if (a.data[x - a.x][y - a.y] &amp;&amp;
-            !(b.data[x - b.x][y - b.y])) {
-          return false;
-        }
-      }
-    }
-    return true;
   };</code></pre></div></div></div><!-- Foundation JS--><script src="http://cdnjs.cloudflare.com/ajax/libs/foundation/3.2.2/javascripts/foundation.min.js"></script><script>/**
  * Prism: Lightweight, robust, elegant syntax highlighting
  * MIT license http://www.opensource.org/licenses/mit-license.php/
