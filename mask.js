@@ -343,8 +343,9 @@ var Mask = (function () {
     var intersect = intersection(a, b);
     for (var x = intersect.x; x < intersect.w; x++) {
       for (var y = intersect.y; y < intersect.h; y++) {
-        if (a.collidesAt(x, y)) {
-          return b.collidesAt(x, y);
+        if (a.collidesAt(x, y) &&
+            b.collidesAt(x, y)) {
+          return true
         }
       }
     }
