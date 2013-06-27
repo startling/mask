@@ -17,7 +17,7 @@ function readToArrayBuffer (path, callback) {
 
 function readMask (path, callback) {
   return readToArrayBuffer (path, function (ab) {
-    return Mask.fromPBM(ab, callback);
+    return new Mask.PBM(ab, callback);
   });
 }
 
@@ -29,10 +29,7 @@ var pbm = [ "test-data/bullet-ascii.pbm",
             "test-data/solid-binary.pbm" ];
 
 describe("Mask", function () {
-  describe("#fromPBM()", function () {
-    it("exists.", function () {
-      assert.notEqual(Mask.fromPBM, undefined);
-    });
+  describe(".PBM()", function () {
     function assertReads (path) {
       it("reads " + path, function (done) {
         readMask(path, function (Mask) {

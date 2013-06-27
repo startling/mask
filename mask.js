@@ -18,7 +18,6 @@ var Mask = (function () {
    */
   function Mask () {
     this.x = this.y = this.w = this.h = 0;
-    this.data = null;
   }
   /* Make a clone of a `Mask`.
    *
@@ -31,7 +30,6 @@ var Mask = (function () {
     other.y = this.y;
     other.w = this.w;
     other.h = this.h;
-    other.data = this.data;
     return other;
   };
   /* Translate this `Mask` in two dimensions.
@@ -125,20 +123,26 @@ var Mask = (function () {
    */
   /* Create a `Mask` object from an `ArrayBuffer` taken as a PBM image.
    *
+   * N.B. do not use the newly-constructed `Mask` directly until
+   * the callback is called.
+   *
+   * @constructor
    * @param {ArrayBuffer} array image data
    * @param {MaskCallback} callback
    * @api public
    */
-  Mask.fromPBM = function (array, callback) {
+  Mask.PBM = function (array, callback) {
+    Mask.bind(this)();
+    this.data = null;
     var bytes = new Uint8Array(array);
     if (bytes.byteLength > 2) {
       if (bytes[0] === 'P'.charCodeAt(0)) {
         if (bytes[1] === '4'.charCodeAt(0)) {
           // This is a PBM binary file...
-          return Mask.fromBinaryPBM(bytes, callback);
+          return fromBinaryPBM(this, bytes, callback);
         } else if (bytes[1] == "1".charCodeAt(0)) {
-          // This is an ASCII binary file...
-          return Mask.fromASCIIPBM(bytes, callback);
+          // This is a PBM ASCII file...
+          return fromASCIIPBM(this, bytes, callback);
         } else {
           // Unknown signature.
           return callback(null, new Error("Unknown PBM signature."));
@@ -151,6 +155,12 @@ var Mask = (function () {
       // File too short.
       return callback(null, Error("Invalid PBM image."));
     }
+  };
+  Mask.PBM.prototype = new Mask();
+  Mask.PBM.prototype.clone = function () {
+    var other = this.__proto__.clone();
+    other.data = this.data;
+    return other;
   };
   /* Skip every byte matching a regular expression.
    *
@@ -205,13 +215,13 @@ var Mask = (function () {
       here = String.fromCharCode(bytes[state.index]);
     }
   }
-  /* Create a Mask from an Uint8Array taken semantically as an ASCII PBM image.
+  /* Create a `Mask` from an Uint8Array taken semantically as an ASCII PBM image.
    *
    * @param {Uint8Buffer} bytes PBM image data.
    * @param {MaskCallback} callback
-   * @api public
+   * @api private
    */
-  Mask.fromASCIIPBM = function (bytes, callback) {
+  fromASCIIPBM = function (m, bytes, callback) {
     var bits = [];
     var state = {index: 2};
     // Skip the spaces and comments post-signature.
@@ -221,8 +231,7 @@ var Mask = (function () {
     // Read numbers and stick them into 'height' until whitespace.
     var height = accumulateRegex(/\d/, bytes, state).join("");
     skipRegex(/\s/, bytes, state);
-    // Create a Mask.
-    var m = new Mask();
+    // Initialize the mask.
     m.w = parseInt(width, 10);
     m.h = parseInt(height, 10);
     // Read 0 and 1 until the end of the file, skipping everything else.
@@ -252,10 +261,10 @@ var Mask = (function () {
    *
    * @param {Uint8Buffer} bytes PBM image data.
    * @param {MaskCallback} callback
-   * @api public
+   * @api private
    */
-  Mask.fromBinaryPBM = function (bytes, callback) {
-     var bits = [];
+  fromBinaryPBM = function (m, bytes, callback) {
+    var bits = [];
     var state = {index: 2};
     // Skip the spaces and comments post-signature.
     skipPostSignature(bytes, state);
@@ -265,8 +274,7 @@ var Mask = (function () {
     // Read numbers and stick them into 'height' until whitespace.
     var height = accumulateRegex(/\d/, bytes, state).join("");
     skipRegex(/\s/, bytes, state);
-    // Create a Mask.
-    var m = new Mask();
+    // Initialize the mask.
     m.w = parseInt(width, 10);
     m.h = parseInt(height, 10);
     // Read each byte, in sequence.
@@ -294,7 +302,7 @@ var Mask = (function () {
    * @param {MaskCallback} callback
    * @api public
    */
-  Mask.fromPBMUrl = function (url, callback) {
+  Mask.PBM.url = function (url, callback) {
     var req = new XMLHttpRequest();
     req.responseType = "arraybuffer";
     req.onload = function (ev) {
