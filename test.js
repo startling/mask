@@ -26,8 +26,10 @@ assert.collides = function (a, b, done) {
   readMask(a, function (a_) {
     readMask(b, function (b_) {
       assert(Mask.collision(a_, b_),
-            a + " does not collide with " + b + ".");
-      done();
+             a + " does not collide with " + b + ".");
+      if (done) {
+        done();
+      }
     });
   });
 };
@@ -36,8 +38,10 @@ assert.disjoint = function (a, b, done) {
   readMask(a, function (a_) {
     readMask(b, function (b_) {
       assert(!Mask.collision(a_, b_),
-            a + " collides with " + b + ".");
-      done();
+             a + " collides with " + b + ".");
+      if (done) {
+        done();
+      }
     });
   });
 };
@@ -91,9 +95,30 @@ describe("Mask", function () {
     });
   });
   // ====================================================================
+  describe(".Box", function () {
+    var examples = [new Mask.Box(10, 12),
+                    new Mask.Box(1, 1),
+                    new Mask.Box(2, 5).at(2, 2)
+                   ];
+    describe("#collidesAt", function () {
+      it("has every nonempty box collide with itself",
+         function () {
+           examples.forEach(function (box) {
+             assert(Mask.collision(box, box));
+           });
+         });
+      it("does not have any boxes collide with themselves, translated",
+         function () {
+           examples.forEach(function (box) {
+             assert(!Mask.collision(box, box.translated(box.h, box.w)));
+           });
+         });
+    });
+  });
+  // ====================================================================
   describe(".Invert", function () {
     describe("#collidesAt", function () {
-      it("does not have things collide with their inverses",
+      it("does not have images collide with their inverses",
          function (done) {
            pbm.forEach(function (img, index) {
              readMask(img, function (m) {
