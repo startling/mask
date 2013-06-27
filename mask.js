@@ -1,4 +1,4 @@
-/* This is `mask`, a tiny MIT-licensed library providing collision masks
+/** This is `mask`, a tiny MIT-licensed library providing collision masks
  * and thus pixel-perfect collision detection in JavaScript. Collision
  * masks are read from [PBM][] files. Check the [github][] page for more
  * information.
@@ -7,7 +7,7 @@
  */
 /*!*/
 var Mask = (function () {
-  /* Construct a `Mask`.
+  /** Construct a `Mask`.
    *
    * Examples:
    * 
@@ -19,7 +19,7 @@ var Mask = (function () {
   function Mask () {
     this.x = this.y = this.w = this.h = 0;
   }
-  /* Make a clone of a `Mask`.
+  /** Make a clone of a `Mask`.
    *
    * @this {Mask}
    * @api public
@@ -32,7 +32,7 @@ var Mask = (function () {
     other.h = this.h;
     return other;
   };
-  /* Translate this `Mask` in two dimensions.
+  /** Translate this `Mask` in two dimensions.
    *
    * @this {Mask}
    * @param {Number} x x-distance
@@ -43,7 +43,7 @@ var Mask = (function () {
     this.x += x;
     this.y += y;
   };
-  /* Make a copy of this `Mask` translated to the coordinates given.
+  /** Make a copy of this `Mask` translated to the coordinates given.
    *
    * @this {Mask}
    * @param {Number} x x-coordinate
@@ -57,7 +57,7 @@ var Mask = (function () {
     other.y = y;
     return other;
   };
-  /* Mask a copy of this `Mask` translated in two dimensions.
+  /** Mask a copy of this `Mask` translated in two dimensions.
    * @this {Mask}
    * @param {Number} x x-distance
    * @param {Number} y y-distance
@@ -69,7 +69,7 @@ var Mask = (function () {
     other.translate(x, y);
     return other;
   };
-  /* Test whether a Mask is completely contained within another.
+  /** Test whether a Mask is completely contained within another.
    *
    * @this {Mask}
    * @param {Mask} b The containing Mask.
@@ -87,7 +87,7 @@ var Mask = (function () {
     }
     return true;
   };
-  /* Test whether this mask collides at the given location.
+  /** Test whether this mask collides at the given location.
    *
    * @this {Mask}
    * @param {Number} x x-coordinate
@@ -103,7 +103,7 @@ var Mask = (function () {
    * @param {Mask} the collision map
    * @api private
    */
-  /* Create a `Mask` object from an `ArrayBuffer` taken as a PBM image.
+  /** Create a `Mask` object from an `ArrayBuffer` taken as a PBM image.
    *
    * N.B. do not use the newly-constructed `Mask` directly until
    * the callback is called.
@@ -148,7 +148,7 @@ var Mask = (function () {
     return !!this.data[x - this.x] &&
       !!this.data[x - this.x][y - this.y];
   };
-  /* Skip every byte matching a regular expression.
+  /** Skip every byte matching a regular expression.
    *
    * @api private
    * @param {RegExp} regex regular expression
@@ -163,7 +163,7 @@ var Mask = (function () {
       }
     }
   }
-  /* Find all the leading characters matching a regular expression and
+  /** Find all the leading characters matching a regular expression and
    * stick them in an array.
    *
    * @api private
@@ -184,7 +184,7 @@ var Mask = (function () {
     }
     return accumulator;
   }
-  /* Skip the parts that come after a PBM signature -- whitespace and any
+  /** Skip the parts that come after a PBM signature -- whitespace and any
    * number of comments.
    *
    * @api private
@@ -201,7 +201,7 @@ var Mask = (function () {
       here = String.fromCharCode(bytes[state.index]);
     }
   }
-  /* Create a `Mask` from an Uint8Array taken semantically as an ASCII PBM image.
+  /** Create a `Mask` from an Uint8Array taken semantically as an ASCII PBM image.
    *
    * @param {Uint8Buffer} bytes PBM image data.
    * @param {MaskCallback} callback
@@ -242,7 +242,7 @@ var Mask = (function () {
     m.data = bits;
     return callback(m);
   };
-  /* Create a `Mask` from an Uint8Array taken semantically as an binary
+  /** Create a `Mask` from an Uint8Array taken semantically as an binary
    * PBM image.
    *
    * @param {Uint8Buffer} bytes PBM image data.
@@ -282,7 +282,7 @@ var Mask = (function () {
     m.data = bits;
     callback(m);
   };
-  /* Create a `Mask` from a PBM image at some URL.
+  /** Create a `Mask` from a PBM image at some URL.
    *
    * @param {String} url A URL pointing to a PBM image.
    * @param {MaskCallback} callback
@@ -305,7 +305,7 @@ var Mask = (function () {
     req.open("GET", url, true);
     req.send();
   };
-  /* Create an object representing the intersection of the bounding
+  /** Create an object representing the intersection of the bounding
    * boxes of two objects.
    *
    * @api private
@@ -319,7 +319,7 @@ var Mask = (function () {
     overlap.h = (a_2.y < b_2.y ? a_2.y : b_2.y) - overlap.y;
     return overlap;
   }
-  /* Test whether two Masks collide.
+  /** Test whether two Masks collide.
    *
    * @param {Mask} a
    * @param {Mask} b
@@ -337,7 +337,7 @@ var Mask = (function () {
     }
     return false;
   };
-  /* Create a mask as an inversion of another.
+  /** Create a mask as an inversion of another.
    *
    * @constructor
    * @param {Mask} other
@@ -354,7 +354,7 @@ var Mask = (function () {
   Mask.Invert.prototype.collidesAt = function (x, y) {
     return !this.inversion.collidesAt(x, y);
   };
-  /* Create a vector box mask.
+  /** Create a vector box mask.
    *
    * @constructor
    * @param {Number} w width
