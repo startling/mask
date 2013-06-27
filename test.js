@@ -23,29 +23,45 @@ function readMask (path, callback) {
   });
 }
 
-assert.collides = function (a, b, done) {
+function readBoth (a, b, done) {
   readMask(a, function (a_) {
     readMask(b, function (b_) {
-      assert(Mask.collision(a_, b_),
-             a + " does not collide with " + b + ".");
-      if (done) {
-        done();
-      }
+      done(a_, b_);
     });
+  });
+}
+  
+
+assert.collides = function (a, b, done) {
+  readBoth(a, b, function (a_, b_) {
+    assert(Mask.collision(a_, b_),
+           a + " does not collide with " + b + ".");
+    if (done) {
+      done();
+    }
   });
 };
 
 assert.disjoint = function (a, b, done) {
-  readMask(a, function (a_) {
-    readMask(b, function (b_) {
-      assert(!Mask.collision(a_, b_),
-             a + " collides with " + b + ".");
-      if (done) {
-        done();
-      }
-    });
+  readBoth(a, b, function (a_, b_) {
+    assert(!Mask.collision(a_, b_),
+           a + " collides with " + b + ".");
+    if (done) {
+      done();
+    }
   });
 };
+
+assert.within = function (a, b, done) {
+  readBoth(a, b, function (a_, b_) {
+    assert(a_.within(b_),
+           a + " is not within " + b + ".");
+    if (done) {
+      done();
+    }
+  });
+};
+
 
 
 describe("Mask", function () {
@@ -92,6 +108,16 @@ describe("Mask", function () {
          function (done) {
            pbm.forEach(function (img, index) {
              assert.collides(img, img, function () {
+               if (index === pbm.length - 1) {
+                 done();
+               }
+             });
+           });
+         });
+      it("has every image within itself",
+         function (done) {
+           pbm.forEach(function (img, index) {
+             assert.within(img, img, function () {
                if (index === pbm.length - 1) {
                  done();
                }
