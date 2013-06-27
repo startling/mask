@@ -350,9 +350,9 @@ var Mask = (function () {
     return !this.inversion.collidesAt(x, y);
   }
   /* Create a vector box mask. */
-  Mask.Box = function (x, y, h, w) {
-    this.x = x;
-    this.y = y;
+  Mask.Box = function (h, w) {
+    this.x = 0;
+    this.y = 0;
     this.w = w;
     this.h = h;
   }
