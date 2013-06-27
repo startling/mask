@@ -170,11 +170,12 @@ describe("Mask", function () {
     assertNotWithin("test-data/frame-ascii.pbm",
                     "test-data/bullet-binary.pbm");
   });
-  describe("#framedBy()", function () {
+  describe(".Box", function () {
     function assertFramedByBoundingBox(a) {
       it ("frames " + a + " by its bounding box", function (done) {
         readMask(a, function (m) {
-          assert.equal(m.framedBy(m.x, m.y, m.w, m.h), true);
+          var other = new Mask.Box(m.x, m.y, m.w, m.h);
+          assert.equal(Mask.collision(other, m), true);
           done();
         });
       });
@@ -183,8 +184,8 @@ describe("Mask", function () {
       it ("does not frame " + a + " by its bounding box, translated",
           function (done) {
             readMask(a, function (m) {
-              assert.equal(m.framedBy(m.x + m.w, m.y + m.h, m.w, m.h),
-                           false);
+              var other = new Mask.Box(m.x + m.w, m.y + m.h, m.w, m.h);
+              assert.equal(Mask.collision(other, m), false);
               done();
         });
       });

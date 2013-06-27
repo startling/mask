@@ -352,6 +352,30 @@ var Mask = (function () {
     return false;
   };
   /*!*/
+  Mask.Invert = function (other) {
+    this.x = other.x;
+    this.y = other.y;
+    this.w = other.w;
+    this.h = other.h;
+    this.inversion = other;
+  }
+  Mask.Invert.prototype = new Mask();
+  Mask.Invert.prototype.collidesAt = function (x, y) {
+    return !this.inversion.collidesAt(x, y);
+  }
+  /* Create a vector box mask. */
+  Mask.Box = function (x, y, h, w) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
+  Mask.Box.prototype = new Mask();
+  Mask.Box.prototype.collidesAt = function (x, y) {
+    return x >= this.x && y >= this.y &&
+      x <= (this.x + this.w) && y <= (this.y + this.h);
+  }
+  /*!*/
   if (typeof module !== "undefined") {
     module.exports = { Mask: Mask };
   }
