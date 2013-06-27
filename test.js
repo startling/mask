@@ -1,13 +1,14 @@
 var fs = require("fs");
+var path = require("path");
 var assert = require("assert");
 var Mask = require("./mask").Mask;
 
-var pbm = [ "test-data/bullet-ascii.pbm",
-            "test-data/frame-ascii.pbm",
-            "test-data/bullet-binary.pbm",
-            "test-data/frame-binary.pbm",
-            "test-data/solid-ascii.pbm",
-            "test-data/solid-binary.pbm" ];
+var pbm = fs.readdirSync("test-data")
+  .filter(function (img) {
+    return /\.pbm$/.test(img);
+  }).map(function (img) {
+    return path.join("test-data", img);
+  });
 
 function readMask (path, callback) {
   var rs = fs.createReadStream(path);
@@ -63,12 +64,17 @@ describe("Mask", function () {
     it("reads all of the test data files /with the correct dimensions/",
         function (done) {
           pbm.forEach(function (img, index) {
+            var match = img.match(/\w+-(\d+)-(\d+)/);
+            var width = parseInt(match[1]);
+            var height = parseInt(match[2]);
             readMask(img, function (m) {
               // N.B. all the test data is 10x10.
-              assert.equal(m.h, 10,
-                           "the mask from" + img + "'s height is not 10")
-              assert.equal(m.w, 10,
-                           "the mask from" + img + "'s width is not 10")
+              assert.equal(m.h, width,
+                           "the mask from " + img +
+                           "'s height is not " + height)
+              assert.equal(m.w, height,
+                           "the mask from " + img +
+                           "'s width is not " + width)
               if (index === pbm.length - 1) {
                 done();
               }
@@ -78,8 +84,8 @@ describe("Mask", function () {
     describe("#collidesAt", function () {
       it("does not have the bullet and the frame collide.",
          function (done) {
-           assert.disjoint("test-data/bullet-ascii.pbm",
-                           "test-data/frame-ascii.pbm",
+           assert.disjoint("test-data/bullet-10-10-ascii.pbm",
+                           "test-data/frame-10-10-ascii.pbm",
                            done);
          });
       it("has every non-empty image collide with itself",
