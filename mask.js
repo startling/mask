@@ -327,8 +327,8 @@ var Mask = (function () {
    */
   Mask.collision = function (a, b) {
     var intersect = intersection(a, b);
-    for (var x = intersect.x; x < intersect.w; x++) {
-      for (var y = intersect.y; y < intersect.h; y++) {
+    for (var x = intersect.x; x < intersect.x + intersect.w; x++) {
+      for (var y = intersect.y; y < intersect.y + intersect.h; y++) {
         if (a.collidesAt(x, y) &&
             b.collidesAt(x, y)) {
           return true
@@ -350,13 +350,18 @@ var Mask = (function () {
     return !this.inversion.collidesAt(x, y);
   }
   /* Create a vector box mask. */
-  Mask.Box = function (h, w) {
+  Mask.Box = function (w, h) {
     this.x = 0;
     this.y = 0;
     this.w = w;
     this.h = h;
   }
   Mask.Box.prototype = new Mask();
+  Mask.Box.prototype.clone = function () {
+    var other = new Mask.Box(this.w, this.h);
+    other.translate(this.x, this.y);
+    return other;
+  }
   Mask.Box.prototype.collidesAt = function (x, y) {
     return x >= this.x && y >= this.y &&
       x <= (this.x + this.w) && y <= (this.y + this.h);
