@@ -97,6 +97,21 @@ describe("Mask", function () {
             });
           });
         });
+    it("gets the same data from the ascii and binary bullets",
+       function (done) {
+         readBoth("test-data/bullet-10-10-ascii.pbm",
+                  "test-data/bullet-10-10-binary.pbm",
+                  function(a_, b_) {
+                    assert.equal(a_.w, b_.w);
+                    assert.equal(a_.h, b_.h);
+                    for (var x = 0; x < a_.w; x++) {
+                      for (var y = 0; y < a_.h; y++) {
+                        assert.equal(a_.data[x][y], b_.data[x][y]);
+                      }
+                    }
+                    done();
+                  });
+       });
     describe("#collidesAt", function () {
       it("does not have the bullet and the frame collide.",
          function (done) {
@@ -143,6 +158,12 @@ describe("Mask", function () {
          function () {
            examples.forEach(function (box) {
              assert(!Mask.collision(box, box.translated(box.h, box.w)));
+           });
+         });
+      it("has every box within itself",
+         function () {
+           examples.forEach(function (box) {
+             assert(box.within(box));
            });
          });
     });
