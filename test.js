@@ -2,7 +2,14 @@ var fs = require("fs");
 var assert = require("assert");
 var Mask = require("./mask").Mask;
 
-function readToArrayBuffer (path, callback) {
+var pbm = [ "test-data/bullet-ascii.pbm",
+            "test-data/frame-ascii.pbm",
+            "test-data/bullet-binary.pbm",
+            "test-data/frame-binary.pbm",
+            "test-data/solid-ascii.pbm",
+            "test-data/solid-binary.pbm" ];
+
+function readMask (path, callback) {
   var rs = fs.createReadStream(path);
   rs.on("readable", function () {
     var buffer = rs.read();
@@ -11,188 +18,96 @@ function readToArrayBuffer (path, callback) {
     for (var i = 0; i < buffer.length; i++) {
       u8[i] = buffer[i];
     }
-    return callback(ab);
-  });
-}
-
-function readMask (path, callback) {
-  return readToArrayBuffer (path, function (ab) {
     return new Mask.PBM(ab, callback);
   });
 }
 
-var pbm = [ "test-data/bullet-ascii.pbm",
-            "test-data/frame-ascii.pbm",
-            "test-data/bullet-binary.pbm",
-            "test-data/frame-binary.pbm",
-            "test-data/solid-ascii.pbm",
-            "test-data/solid-binary.pbm" ];
+assert.collides = function (a, b, done) {
+  readMask(a, function (a_) {
+    readMask(b, function (b_) {
+      assert(Mask.collision(a_, b_),
+            a + " does not collide with " + b + ".");
+      done();
+    });
+  });
+};
+
+assert.disjoint = function (a, b, done) {
+  readMask(a, function (a_) {
+    readMask(b, function (b_) {
+      assert(!Mask.collision(a_, b_),
+            a + " collides with " + b + ".");
+      done();
+    });
+  });
+};
+
 
 describe("Mask", function () {
-  describe(".PBM()", function () {
-    function assertReads (path) {
-      it("reads " + path, function (done) {
-        readMask(path, function (Mask) {
-          done();
-        });
-      });
-    }
-    function assertSize (path, width, height) {
-      it("gets the size of " + path + " right", function (done) {
-        readMask(path, function (Mask) {
-          assert.equal(Mask.w, width);
-          assert.equal(Mask.h, height);
-          done();
-        });
-      });
-    }
-    /* We should be able to read each image and get its size correct. */
-    pbm.forEach(function (img) {
-      assertReads(img);
-      assertSize(img, 10, 10);
-    });
-    function assertDataEqual (a, b) {
-      it("gets the same data for " + a + " and " + b, function (done) {
-        readMask(a, function (maskA) {
-          readMask(b, function (maskB) {
-            assert.equal(maskA.w, maskB.w);
-            assert.equal(maskA.h, maskB.h);
-            for (var x = 0; x < maskA.w; x++) {
-              for (var y = 0; y < maskA.h; y++) {
-                assert.equal(maskA.data[x][y], maskB.data[x][y]);
+  // ====================================================================
+  describe(".PBM", function () {
+    it("reads all of the test data files",
+        function (done) {
+          pbm.forEach(function (img, index) {
+            readMask(img, function (m) {
+              if (index === pbm.length - 1) {
+                done();
               }
-            }
-            done();
+            });
           });
         });
-      });
-    }
-    /* The binary and ascii variants of things should have equal data. */
-    assertDataEqual("test-data/bullet-binary.pbm",
-                    "test-data/bullet-ascii.pbm");
-    assertDataEqual("test-data/frame-binary.pbm",
-                    "test-data/frame-ascii.pbm");
-    /* Make sure we read commented ASCII PBM correctly. */
-    it("Reads commented ASCII PBM", function (done) {
-      readMask("test-data/commented-ascii.pbm", function (m) {
-        assert.equal(m.w, 1);
-        assert.equal(m.h, 1);
-        done();
-      });
-    });
-  });
-  describe(".collision()", function () {
-    function assertCollidesWithSelf (path) {
-      it ("says " + path + " collides with itself", function (done) {
-        readMask(path, function (m) {
-          assert.equal(Mask.collision(m, m), true);
-          done();
+    it("reads all of the test data files /with the correct dimensions/",
+        function (done) {
+          pbm.forEach(function (img, index) {
+            readMask(img, function (m) {
+              // N.B. all the test data is 10x10.
+              assert.equal(m.h, 10,
+                           "the mask from" + img + "'s height is not 10")
+              assert.equal(m.w, 10,
+                           "the mask from" + img + "'s width is not 10")
+              if (index === pbm.length - 1) {
+                done();
+              }
+            });
+          });
         });
-      });
-    }
-    function assertDoesNotCollideWithTranslatedSelf (path) {
-      it("says " + path + "doesn't collide with itself, translated",
+    describe("#collidesAt", function () {
+      it("does not have the bullet and the frame collide.",
          function (done) {
-           readMask(path, function (m) {
-             var o = m.at(m.w, m.h);
-             assert.equal(Mask.collision(m, o), false);
-             done();
+           assert.disjoint("test-data/bullet-ascii.pbm",
+                           "test-data/frame-ascii.pbm",
+                           done);
+         });
+      it("has every non-empty image collide with itself",
+         function (done) {
+           pbm.forEach(function (img, index) {
+             assert.collides(img, img, function () {
+               if (index === pbm.length - 1) {
+                 done();
+               }
+             });
            });
          });
-    }
-    function assertCollides(a, b) {
-      it("says that " + a + " and " + b + " collide", function (done) {
-        readMask(a, function (maskA) {
-          readMask(b, function (maskB) {
-            assert.equal(Mask.collision(maskA, maskB), true);
-            done();
-          });
-        });
-      });
-    }
-    function assertDoesNotCollide(a, b) {
-      it("says that " + a + " and " + b + "do not collide", function (done) {
-        readMask(a, function (maskA) {
-          readMask(b, function (maskB) {
-            assert.equal(Mask.collision(maskA, maskB), false);
-            done();
-          });
-        });
-      });
-    }
-    /* Every nonempty image should collide with itself;
-       every nonempty image should collide with the solid image;
-       every image should not collide with itself translated by its size. */
-    pbm.forEach(function (img) {
-      assertCollidesWithSelf(img);
-      assertCollides(img, "test-data/solid-binary.pbm");
-      assertDoesNotCollideWithTranslatedSelf(img);
-    });
-    /* The frame image and the bullet image should not collide. */
-    assertDoesNotCollide("test-data/frame-ascii.pbm",
-                         "test-data/bullet-binary.pbm");
-  });
-  describe(".within()", function () {
-    function assertWithinSelf (path) {
-      it ("says " + path + " is within itself", function (done) {
-        readMask(path, function (m) {
-          assert.equal(m.within(m), true);
-          done();
-        });
-      });
-    }
-    function assertWithin(a, b) {
-      it("says that " + a + " is within " + b, function (done) {
-        readMask(a, function (maskA) {
-          readMask(b, function (maskB) {
-            assert.equal(maskA.within(maskB), true);
-            done();
-          });
-        });
-      });
-    }
-    function assertNotWithin(a, b) {
-      it("says that " + a + " is not within " + b, function (done) {
-        readMask(a, function (maskA) {
-          readMask(b, function (maskB) {
-            assert.equal(maskA.within(maskB), false);
-            done();
-          });
-        });
-      });
-    }
-    /* Every image should be within itself and within the solid image. */
-    pbm.forEach(function (img) {
-      assertWithinSelf(img);
-      assertWithin(img, "test-data/solid-binary.pbm");
-    });
-    /* The frame image should not be within the bullet image. */
-    assertNotWithin("test-data/frame-ascii.pbm",
-                    "test-data/bullet-binary.pbm");
-  });
-  describe(".Box", function () {
-    function assertFramedByBoundingBox(a) {
-      it ("frames " + a + " by its bounding box", function (done) {
-        readMask(a, function (m) {
-          var other = new Mask.Box(m.x, m.y, m.w, m.h);
-          assert.equal(Mask.collision(other, m), true);
-          done();
-        });
-      });
-    }
-    function assertNotFramedByTranslatedBoundingBox(a) {
-      it ("does not frame " + a + " by its bounding box, translated",
-          function (done) {
-            readMask(a, function (m) {
-              var other = new Mask.Box(m.x + m.w, m.y + m.h, m.w, m.h);
-              assert.equal(Mask.collision(other, m), false);
-              done();
-        });
-      });
-    }
-    pbm.forEach(function (img) {
-      assertFramedByBoundingBox(img);
-      assertNotFramedByTranslatedBoundingBox(img);
     });
   });
+  // ====================================================================
+  describe(".Invert", function () {
+    describe("#collidesAt", function () {
+      it("does not have things collide with their inverses",
+         function (done) {
+           pbm.forEach(function (img, index) {
+             readMask(img, function (m) {
+               var inverse = new Mask.Invert(m);
+               assert(!Mask.collision(m, inverse));
+               if (index === pbm.length - 1) {
+                 done();
+               }
+             });
+           });
+         });
+    });
+  });
+  // ====================================================================
 });
+       
+
