@@ -36,8 +36,8 @@ probably want something like
 
 # cool, how do I use this?
 
-You probably want `mask.fromPBMUrl`, `mask.collision`, and
-`mask.within`. There are some just-alright [docs][]. The source is
+You probably want `Mask.PBM.url`, `Mask.collision`, and
+`Mask.within`. There are some just-alright [docs][]. The source is
 well-commented and not difficult; might as well take a look.
 
 [docs]: http://startling.github.io/mask/
