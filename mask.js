@@ -96,7 +96,7 @@ var Mask = (function () {
    * @api public
    */
   Mask.prototype.collidesAt = function (x, y) {
-    return this.data[x - this.x][y - this.y];
+    return false;
   };
   /** Some callbacks expect a `Mask`.
    * @callback MaskCallback
@@ -144,6 +144,10 @@ var Mask = (function () {
     other.data = this.data;
     return other;
   };
+  Mask.PBM.prototype.collidesAt = function (x, y) {
+    return !!this.data[x - this.x] &&
+      !!this.data[x - this.x][y - this.y];
+  }
   /* Skip every byte matching a regular expression.
    *
    * @api private
