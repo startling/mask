@@ -147,7 +147,7 @@ var Mask = (function () {
   Mask.PBM.prototype.collidesAt = function (x, y) {
     return !!this.data[x - this.x] &&
       !!this.data[x - this.x][y - this.y];
-  }
+  };
   /* Skip every byte matching a regular expression.
    *
    * @api private
@@ -331,7 +331,7 @@ var Mask = (function () {
       for (var y = intersect.y; y < intersect.y + intersect.h; y++) {
         if (a.collidesAt(x, y) &&
             b.collidesAt(x, y)) {
-          return true
+          return true;
         }
       }
     }
@@ -349,11 +349,11 @@ var Mask = (function () {
     this.w = other.w;
     this.h = other.h;
     this.inversion = other;
-  }
+  };
   Mask.Invert.prototype = new Mask();
   Mask.Invert.prototype.collidesAt = function (x, y) {
     return !this.inversion.collidesAt(x, y);
-  }
+  };
   /* Create a vector box mask.
    *
    * @constructor
@@ -366,17 +366,17 @@ var Mask = (function () {
     this.y = 0;
     this.w = w;
     this.h = h;
-  }
+  };
   Mask.Box.prototype = new Mask();
   Mask.Box.prototype.clone = function () {
     var other = new Mask.Box(this.w, this.h);
     other.translate(this.x, this.y);
     return other;
-  }
+  };
   Mask.Box.prototype.collidesAt = function (x, y) {
     return x >= this.x && y >= this.y &&
       x <= (this.x + this.w) && y <= (this.y + this.h);
-  }
+  };
   /*!*/
   if (typeof module !== "undefined") {
     module.exports = { Mask: Mask };

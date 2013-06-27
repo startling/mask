@@ -3,9 +3,8 @@ var path = require("path");
 var assert = require("assert");
 var Mask = require("./mask").Mask;
 
-var pbm = fs.readdirSync("test-data")
-  .filter(function (img) {
-    return /\.pbm$/.test(img);
+var pbm = fs.readdirSync("test-data").filter(function (img) {
+    return (/\.pbm$/).test(img);
   }).map(function (img) {
     return path.join("test-data", img);
   });
@@ -81,16 +80,16 @@ describe("Mask", function () {
         function (done) {
           pbm.forEach(function (img, index) {
             var match = img.match(/\w+-(\d+)-(\d+)/);
-            var width = parseInt(match[1]);
-            var height = parseInt(match[2]);
+            var width = parseInt(match[1], 10);
+            var height = parseInt(match[2], 10);
             readMask(img, function (m) {
               // N.B. all the test data is 10x10.
               assert.equal(m.h, width,
                            "the mask from " + img +
-                           "'s height is not " + height)
+                           "'s height is not " + height);
               assert.equal(m.w, height,
                            "the mask from " + img +
-                           "'s width is not " + width)
+                           "'s width is not " + width);
               if (index === pbm.length - 1) {
                 done();
               }
