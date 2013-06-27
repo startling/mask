@@ -337,7 +337,12 @@ var Mask = (function () {
     }
     return false;
   };
-  /*!*/
+  /* Create a mask as an inversion of another.
+   *
+   * @constructor
+   * @param {Mask} other
+   * @api public
+   */
   Mask.Invert = function (other) {
     this.x = other.x;
     this.y = other.y;
@@ -349,7 +354,13 @@ var Mask = (function () {
   Mask.Invert.prototype.collidesAt = function (x, y) {
     return !this.inversion.collidesAt(x, y);
   }
-  /* Create a vector box mask. */
+  /* Create a vector box mask.
+   *
+   * @constructor
+   * @param {Number} w width
+   * @param {Number} h height
+   * @api public
+   */
   Mask.Box = function (w, h) {
     this.x = 0;
     this.y = 0;
