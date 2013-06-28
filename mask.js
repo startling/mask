@@ -344,7 +344,6 @@ var Mask = (function () {
    */
   Mask.PBM.url = function (url, callback) {
     var req = new XMLHttpRequest();
-    req.responseType = "arraybuffer";
     req.onload = function (ev) {
       if (req.response) {
         var m = new Mask.PBM();
@@ -358,6 +357,7 @@ var Mask = (function () {
       return callback(null, e);
     };
     req.open("GET", url, true);
+    req.responseType = "arraybuffer";
     req.send();
   };
   /** Load an `ArrayBuffer` taken as a PBM image to a PBM mask.
