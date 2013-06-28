@@ -194,8 +194,9 @@ var Mask = (function () {
     return other;
   };
   Mask.PBM.prototype.collidesAt = function (x, y) {
-    return !!this.data[x - this.x] &&
-      !!this.data[x - this.x][y - this.y];
+    var div = Math.floor((y - this.y) / 8);
+    var mod = (y - this.y) % 8;
+    return !!(this.data[x - this.x][div] >> (7 - mod) & 0x1);
   };
   /** Skip every byte matching a regular expression.
    *
@@ -288,7 +289,19 @@ var Mask = (function () {
         break;
       }
     }
-    m.data = bits;
+    m.data = [];
+    for (var row = 0; row < bits.length; row++) {
+      var buffer = new ArrayBuffer(Math.ceil(bits[row].length / 8));
+      var uint8 = new Uint8Array(buffer);
+      m.data.push(uint8);
+      for (var col = 0; col < bits[row].length; col++) {
+        if (bits[row][col]) {
+          var div = Math.floor(col / 8);
+          var mod = col % 8;
+          uint8[div] |= 1 << (7 - mod);
+        }
+      }
+    }
     return callback(m);
   };
   /** Create a `Mask` from an Uint8Array taken semantically as an binary
@@ -328,7 +341,19 @@ var Mask = (function () {
         }
       }
     }
-    m.data = bits;
+    m.data = [];
+    for (var row = 0; row < bits.length; row++) {
+      var buffer = new ArrayBuffer(Math.ceil(bits[row].length / 8));
+      var uint8 = new Uint8Array(buffer);
+      m.data.push(uint8);
+      for (var col = 0; col < bits[row].length; col++) {
+        if (bits[row][col]) {
+          var div = Math.floor(col / 8);
+          var mod = col % 8;
+          uint8[div] |= 1 << (7 - mod);
+        }
+      }
+    }
     callback(m);
   };
   /** Create a `Mask` from a PBM image at some URL.
