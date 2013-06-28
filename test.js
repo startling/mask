@@ -180,14 +180,14 @@ describe("Mask", function () {
              });
            });
          });
-      it("has every nonempty image not within the empty box",
+      it("has every nonempty image not within a unit box at -1, -1",
          function (done) {
-           var empty = new Mask.Box(0, 0);
+           var empty = new Mask.Box(1, 1).at(-1, -1);
            pbm.filter(function (img) {
              return !(/empty/).test(img);
            }).forEach(function (img, index, arr) {
              readMask(img, function (m) {
-               assert(m.within(empty));
+               assert(!m.within(empty));
                if (index === arr.length - 1) {
                  done();
                }
