@@ -1,5 +1,6 @@
 var fs = require("fs");
 var Benchmark = require("benchmark");
+var memwatch = require('memwatch');
 var Mask = require("./mask");
 
 function readMask (path, callback) {
@@ -23,6 +24,14 @@ function readBoth (a, b, done) {
     });
   });
 }
+
+var hd = new memwatch.HeapDiff();
+readMask("test-data/frame-10-10-ascii.pbm",
+         function (_a) {
+           var diff = hd.end();
+           console.log("Reading \"frame-10-10-ascii.pbm\" costs",
+                       diff.change.size + ".");
+         });
 
 readBoth("test-data/frame-10-10-ascii.pbm",
          "test-data/dot-10-10-ascii.pbm",

@@ -24,7 +24,8 @@
   ],
   "devDependencies": {
     "mocha": "1.11.x",
-    "benchmark": "1.x"
+    "benchmark": "1.x",
+    "memwatch": "0.2.x"
   },
   "license": "MIT",
   "engines": {
