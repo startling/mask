@@ -355,7 +355,7 @@ var Mask = (function () {
     var other = new Mask.Invert(this.inversion);
     other.translate(this.x, this.y);
     return other;
-  }
+  };
   Mask.Invert.prototype.collidesAt = function (x, y) {
     return !this.inversion.collidesAt(x, y);
   };
