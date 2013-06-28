@@ -23,7 +23,8 @@
     "sprites"
   ],
   "devDependencies": {
-    "mocha": "1.11.x"
+    "mocha": "1.11.x",
+    "benchmark": "1.x"
   },
   "license": "MIT",
   "engines": {

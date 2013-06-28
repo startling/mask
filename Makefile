@@ -11,6 +11,9 @@ test: $(IMAGES) mask.js test.js
 lint: $(wildcard *.js)
 	$(foreach file,$^,jsl -process $(file) -nologo;)
 
+bench: benchmark.js mask.js
+	node $<
+
 docs: doc.html
 
 doc.html: mask.js
