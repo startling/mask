@@ -180,6 +180,20 @@ describe("Mask", function () {
              });
            });
          });
+      it("has every nonempty image not within the empty box",
+         function (done) {
+           var empty = new Mask.Box(0, 0);
+           pbm.filter(function (img) {
+             return !(/empty/).test(img);
+           }).forEach(function (img, index, arr) {
+             readMask(img, function (m) {
+               assert(m.within(empty));
+               if (index === arr.length - 1) {
+                 done();
+               }
+             });
+           });
+         });
     });
   });
   // ====================================================================
