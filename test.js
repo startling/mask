@@ -120,9 +120,11 @@ describe("Mask", function () {
          });
       it("has every non-empty image collide with itself",
          function (done) {
-           pbm.forEach(function (img, index) {
+           pbm.filter(function (img) {
+             return !(/empty/).test(img);
+           }).forEach(function (img, index, arr) {
              assert.collides(img, img, function () {
-               if (index === pbm.length - 1) {
+               if (index === arr.length - 1) {
                  done();
                }
              });
