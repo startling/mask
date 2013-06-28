@@ -102,19 +102,29 @@ var Mask = (function () {
    * @param {Mask} the collision map
    * @api private
    */
-  /** Create a `Mask` object from an `ArrayBuffer` taken as a PBM image.
-   *
-   * N.B. do not use the newly-constructed `Mask` directly until
-   * the callback is called.
+  /**  Create an empty PBM mask.
    *
    * @constructor
+   * @api public
+   */
+  Mask.PBM = function () {
+    this.x = 0;
+    this.y = 0;
+    this.w = 0;
+    this.h = 0;
+    this.data = [];
+  }
+  Mask.PBM.prototype = new Mask();
+  /** Load an `ArrayBuffer` taken as a PBM image to a PBM mask.
+   *
+   * N.B. do not use the newly-initialized `Mask` directly until
+   * the callback is called.
+   *
    * @param {ArrayBuffer} array image data
    * @param {MaskCallback} callback
    * @api public
    */
-  Mask.PBM = function (array, callback) {
-    Mask.bind(this)();
-    this.data = null;
+  Mask.PBM.prototype.load = function (array, callback) {
     var bytes = new Uint8Array(array);
     if (bytes.byteLength > 2) {
       if (bytes[0] === 'P'.charCodeAt(0)) {
@@ -137,9 +147,12 @@ var Mask = (function () {
       return callback(null, Error("Invalid PBM image."));
     }
   };
-  Mask.PBM.prototype = new Mask();
   Mask.PBM.prototype.clone = function () {
-    var other = this.__proto__.clone();
+    var other = new Mask();
+    other.x = this.x;
+    other.y = this.y;
+    other.w = this.w;
+    other.h = this.h;
     other.data = this.data;
     return other;
   };
@@ -292,7 +305,8 @@ var Mask = (function () {
     req.responseType = "arraybuffer";
     req.onload = function (ev) {
       if (req.response) {
-        return new Mask.PBM(req.response, callback);
+        var m = new Mask.PBM();
+        return m.load(req.response, callback);
       } else {
         // No response.
         return callback(null, new Error("No response."));

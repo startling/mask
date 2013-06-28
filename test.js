@@ -18,7 +18,8 @@ function readMask (path, callback) {
     for (var i = 0; i < buffer.length; i++) {
       u8[i] = buffer[i];
     }
-    return new Mask.PBM(ab, callback);
+    var m = new Mask.PBM();
+    return m.load(ab, callback);
   });
 }
 
