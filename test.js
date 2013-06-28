@@ -30,7 +30,6 @@ function readBoth (a, b, done) {
     });
   });
 }
-  
 
 assert.collides = function (a, b, done) {
   readBoth(a, b, function (a_, b_) {

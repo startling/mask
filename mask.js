@@ -148,7 +148,7 @@ var Mask = (function () {
     }
   };
   Mask.PBM.prototype.clone = function () {
-    var other = new Mask();
+    var other = new Mask.PBM();
     other.x = this.x;
     other.y = this.y;
     other.w = this.w;
