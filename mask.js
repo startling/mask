@@ -113,7 +113,7 @@ var Mask = (function () {
     this.w = 0;
     this.h = 0;
     this.data = [];
-  }
+  };
   Mask.PBM.prototype = new Mask();
   /** Load an `ArrayBuffer` taken as a PBM image to a PBM mask.
    *
