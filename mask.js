@@ -380,7 +380,7 @@ var Mask = (function () {
   };
   Mask.Box.prototype.collidesAt = function (x, y) {
     return x >= this.x && y >= this.y &&
-      x <= (this.x + this.w) && y <= (this.y + this.h);
+      x < (this.x + this.w) && y < (this.y + this.h);
   };
   /*!*/
   if (typeof module !== "undefined") {
