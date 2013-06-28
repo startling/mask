@@ -257,7 +257,6 @@ var Mask = (function () {
    * @api private
    */
   fromASCIIPBM = function (m, bytes, callback) {
-    var bits = [];
     var state = {index: 2};
     // Skip the spaces and comments post-signature.
     skipPostSignature(bytes, state);
@@ -269,26 +268,28 @@ var Mask = (function () {
     // Initialize the mask.
     m.w = parseInt(width, 10);
     m.h = parseInt(height, 10);
+    m.data = []
     // Read 0 and 1 until the end of the file, skipping everything else.
-    for (; state.index < bytes.byteLength; state.index++) {
-      function add (x) {
-        if (!bits.length || bits[bits.length - 1].length === m.w) {
-          bits.push([]);
+    for (var x = 0; x < m.w; x++) {
+      var row = [];
+      for (var y = 0; y < m.h; y++) {
+        if (state.index >= bytes.byteLength) {
+          break;
         }
-        bits[bits.length - 1].push(x);
+        while (state.index < bytes.byteLength) {
+          var here = String.fromCharCode(bytes[state.index]);
+          state.index += 1;
+          if (here === '0') {
+            row.push(false);
+            break;
+          } else if (here === '1') {
+            row.push(true);
+            break;
+          };
+        }
       }
-      switch (bytes[state.index]) {
-      case '0'.charCodeAt(0):
-        add(false);
-        break;
-      case '1'.charCodeAt(0):
-        add(true);
-        break;
-      default:
-        break;
-      }
+      m.data.push(row);
     }
-    m.data = bits;
     return callback(m);
   };
   /** Create a `Mask` from an Uint8Array taken semantically as an binary
