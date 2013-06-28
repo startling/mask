@@ -387,7 +387,7 @@ var Mask = (function () {
   };
   /*!*/
   if (typeof module !== "undefined") {
-    module.exports = { Mask: Mask };
+    module.exports = Mask;
   }
   return Mask;
 })();

@@ -1,7 +1,7 @@
 var fs = require("fs");
 var path = require("path");
 var assert = require("assert");
-var Mask = require("./mask").Mask;
+var Mask = require("./mask");
 
 var pbm = fs.readdirSync("test-data").filter(function (img) {
     return (/\.pbm$/).test(img);
