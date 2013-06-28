@@ -351,6 +351,11 @@ var Mask = (function () {
     this.inversion = other;
   };
   Mask.Invert.prototype = new Mask();
+  Mask.Invert.prototype.clone = function () {
+    var other = new Mask.Invert(this.inversion);
+    other.translate(this.x, this.y);
+    return other;
+  }
   Mask.Invert.prototype.collidesAt = function (x, y) {
     return !this.inversion.collidesAt(x, y);
   };
