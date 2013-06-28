@@ -293,7 +293,7 @@ var Mask = (function () {
     req.responseType = "arraybuffer";
     req.onload = function (ev) {
       if (req.response) {
-        return Mask.fromPBM(req.response, callback);
+        return new Mask.PBM(req.response, callback);
       } else {
         // No response.
         return callback(null, new Error("No response."));
