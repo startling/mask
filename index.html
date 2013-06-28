@@ -17,61 +17,63 @@ code {
   div.description {margin: 14px 0; padding-top: 14px; border-top:1px solid #eee; border-bottom:1px solid #eee; }
   .tags {}
     .tags .types {color:#666}
-.ctx-type { float:right; margin-top:8px }</style></head><body><div class="row"><div class="twelve columns"><h1 class="pagetitle">mask</h1></div></div><div class="row"><div id="nav" class="three columns"><ul class="side-nav"><li><a href="#mask">mask</a></li><li><a href="#clone">clone</a></li><li><a href="#translate">translate</a></li><li><a href="#at">at</a></li><li><a href="#translated">translated</a></li><li><a href="#framedBy">framedBy</a></li><li><a href="#within">within</a></li><li><a href="#fromPBM">fromPBM</a></li><li><a href="#fromASCIIPBM">fromASCIIPBM</a></li><li><a href="#fromBinaryPBM">fromBinaryPBM</a></li><li><a href="#fromPBMUrl">fromPBMUrl</a></li><li><a href="#collision">collision</a></li></ul></div><div class="nine columns"><div class="comment"><div class="tags"><ul class="no-bullet"></ul></div><div class="description"><p>This is <code>mask</code>, a tiny MIT-licensed library providing collision masks<br />and thus pixel-perfect collision detection in JavaScript. Collision<br />masks are read from <a href="http://netpbm.sourceforge.net/doc/pbm.html">PBM</a> files. Check the <a href="https://github.com/startling/mask">github</a> page for more<br />information.</p></div></div><div class="comment"><div class="label radius ctx-type">function</div><h1 id="mask">mask</h1><h5 class="subheader">mask()</h5><div class="tags"><ul class="no-bullet"><li><strong>@constructor: </strong></li></ul></div><div class="description"><p>Construct a <code>mask</code>.</p>
+.ctx-type { float:right; margin-top:8px }</style></head><body><div class="row"><div class="twelve columns"><h1 class="pagetitle">mask</h1></div></div><div class="row"><div id="nav" class="three columns"><ul class="side-nav"><li><a href="#Mask">Mask</a></li><li><a href="#clone">clone</a></li><li><a href="#translate">translate</a></li><li><a href="#at">at</a></li><li><a href="#translated">translated</a></li><li><a href="#within">within</a></li><li><a href="#collidesAt">collidesAt</a></li><li><a href="#PBM">PBM</a></li><li><a href="#load">load</a></li><li><a href="#url">url</a></li><li><a href="#collision">collision</a></li><li><a href="#Invert">Invert</a></li><li><a href="#Box">Box</a></li></ul></div><div class="nine columns"><div class="comment"><div class="tags"><ul class="no-bullet"></ul></div><div class="description"><p>This is <code>mask</code>, a tiny MIT-licensed library providing collision masks<br />and thus pixel-perfect collision detection in JavaScript. Collision<br />masks are read from <a href="http://netpbm.sourceforge.net/doc/pbm.html">PBM</a> files. Check the <a href="https://github.com/startling/mask">github</a> page for more<br />information.</p></div></div><div class="comment"><div class="label radius ctx-type">function</div><h1 id="Mask">Mask</h1><h5 class="subheader">Mask()</h5><div class="tags"><ul class="no-bullet"><li><strong>@constructor: </strong></li></ul></div><div class="description"><p>Construct a <code>Mask</code>.</p>
 
 <h2>Examples</h2>
 
-<pre><code>new mask()
-</code></pre></div><pre><code class="language-javascript">function mask () {
+<pre><code>new Mask()
+</code></pre></div><pre><code class="language-javascript">function Mask () {
     this.x = this.y = this.w = this.h = 0;
-    this.data = null;
-  }</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="clone">clone</h1><h5 class="subheader">mask.prototype.clone()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{mask}</span></li></ul></div><div class="description"><p>Make a clone of a <code>mask</code>.</p></div><pre><code class="language-javascript">mask.prototype.clone = function () {
-    var other = new mask();
+  }</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="clone">clone</h1><h5 class="subheader">Mask.prototype.clone()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{Mask}</span></li></ul></div><div class="description"><p>Make a clone of a <code>Mask</code>.</p></div><pre><code class="language-javascript">Mask.prototype.clone = function () {
+    var other = new Mask();
     other.x = this.x;
     other.y = this.y;
     other.w = this.w;
     other.h = this.h;
-    other.data = this.data;
     return other;
-  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="translate">translate</h1><h5 class="subheader">mask.prototype.translate()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{mask}</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">x </span><span class="description">x-distance</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">y </span><span class="description">y-distancex</span></li></ul></div><div class="description"><p>Translate this <code>mask</code> in two dimensions.</p></div><pre><code class="language-javascript">mask.prototype.translate = function (x, y) {
+  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="translate">translate</h1><h5 class="subheader">Mask.prototype.translate()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{Mask}</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">x </span><span class="description">x-distance</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">y </span><span class="description">y-distancex</span></li></ul></div><div class="description"><p>Translate this <code>Mask</code> in two dimensions.</p></div><pre><code class="language-javascript">Mask.prototype.translate = function (x, y) {
     this.x += x;
     this.y += y;
-  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="at">at</h1><h5 class="subheader">mask.prototype.at()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{mask}</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">x </span><span class="description">x-coordinate</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">y </span><span class="description">y-coordinate</span></li><li><strong>@return: </strong><span class="types"> {mask} </span></li></ul></div><div class="description"><p>Make a copy of this <code>mask</code> translated to the coordinates given.</p></div><pre><code class="language-javascript">mask.prototype.at = function (x, y) {
+  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="at">at</h1><h5 class="subheader">Mask.prototype.at()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{Mask}</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">x </span><span class="description">x-coordinate</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">y </span><span class="description">y-coordinate</span></li><li><strong>@return: </strong><span class="types"> {Mask} </span></li></ul></div><div class="description"><p>Make a copy of this <code>Mask</code> translated to the coordinates given.</p></div><pre><code class="language-javascript">Mask.prototype.at = function (x, y) {
     var other = this.clone();
     other.x = x;
     other.y = y;
     return other;
-  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="translated">translated</h1><h5 class="subheader">mask.prototype.translated()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{mask}</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">x </span><span class="description">x-distance</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">y </span><span class="description">y-distance</span></li><li><strong>@return: </strong><span class="types"> {mask} </span></li></ul></div><div class="description"><p>Mask a copy of this <code>mask</code> translated in two dimensions.</p></div><pre><code class="language-javascript">mask.prototype.translated = function (x, y) {
+  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="translated">translated</h1><h5 class="subheader">Mask.prototype.translated()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{Mask}</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">x </span><span class="description">x-distance</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">y </span><span class="description">y-distance</span></li><li><strong>@return: </strong><span class="types"> {Mask} </span></li></ul></div><div class="description"><p>Mask a copy of this <code>Mask</code> translated in two dimensions.</p></div><pre><code class="language-javascript">Mask.prototype.translated = function (x, y) {
     var other = this.clone();
     other.translate(x, y);
     return other;
-  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="framedBy">framedBy</h1><h5 class="subheader">mask.prototype.framedBy()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{mask}</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">x </span><span class="description">the top left x-coordinate of the box</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">y </span><span class="description">the top left y-coordinate of the box</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">w </span><span class="description">the width of the box</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">h </span><span class="description">the height of the box</span></li><li><strong>@return: </strong><span class="types"> {Boolean} </span></li></ul></div><div class="description"><p>Test that a mask is completely within a box described by<br />the coordinates of its top-left corner and its width and height.</p></div><pre><code class="language-javascript">mask.prototype.framedBy = function (x, y, w, h) {
-    var intersect = intersection(this, {x: x, y: y, w: w, h: h});
-    return intersect.x === this.x &amp;&amp;
-      intersect.y === this.y &amp;&amp;
-      intersect.h === this.h &amp;&amp;
-      intersect.w === this.w;
-  }</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="within">within</h1><h5 class="subheader">mask.prototype.within()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{mask}</span></li><li><strong>@param: </strong><span class="types"> {mask} </span><span class="name">b </span><span class="description">The containing mask.</span></li></ul></div><div class="description"><p>Test whether a mask is completely contained within another.</p></div><pre><code class="language-javascript">mask.prototype.within = function (b) {
-    var intersect = intersection(this, b);
-    for (var x = intersect.x; x &lt; intersect.w; x++) {
-      for (var y = intersect.y; y &lt; intersect.h; y++) {
-        if (this.data[x - this.x][y - this.y] &amp;&amp;
-            !(b.data[x - b.x][y - b.y])) {
+  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="within">within</h1><h5 class="subheader">Mask.prototype.within()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{Mask}</span></li><li><strong>@param: </strong><span class="types"> {Mask} </span><span class="name">b </span><span class="description">The containing Mask.</span></li></ul></div><div class="description"><p>Test whether a Mask is completely contained within another.</p></div><pre><code class="language-javascript">Mask.prototype.within = function (b) {
+    for (var x = this.x; x &lt; this.w + this.x; x++) {
+      for (var y = this.y; y &lt; this.h + this.y; y++) {
+        if (this.collidesAt(x, y) &amp;&amp;
+            !b.collidesAt(x, y)) {
           return false;
         }
       }
     }
     return true;
-  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="fromPBM">fromPBM</h1><h5 class="subheader">mask.fromPBM()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {ArrayBuffer} </span><span class="name">array </span><span class="description">image data</span></li><li><strong>@param: </strong><span class="types"> {maskCallback} </span><span class="name">callback </span></li></ul></div><div class="description"><p>Create a <code>mask</code> object from an <code>ArrayBuffer</code> taken as a PBM image.</p></div><pre><code class="language-javascript">mask.fromPBM = function (array, callback) {
+  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="collidesAt">collidesAt</h1><h5 class="subheader">Mask.prototype.collidesAt()</h5><div class="tags"><ul class="no-bullet"><li><strong>@this: </strong><span class="string">{Mask}</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">x </span><span class="description">x-coordinate</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">y </span><span class="description">y-coordinate</span></li><li><strong>@return: </strong><span class="types"> {Mask} </span></li></ul></div><div class="description"><p>Test whether this mask collides at the given location.</p></div><pre><code class="language-javascript">Mask.prototype.collidesAt = function (x, y) {
+    return false;
+  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="PBM">PBM</h1><h5 class="subheader">Mask.PBM()</h5><div class="tags"><ul class="no-bullet"><li><strong>@constructor: </strong></li></ul></div><div class="description"><p>Create an empty PBM mask.</p></div><pre><code class="language-javascript">Mask.PBM = function () {
+    this.x = 0;
+    this.y = 0;
+    this.w = 0;
+    this.h = 0;
+    this.data = [];
+  };
+  Mask.PBM.prototype = new Mask();</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="load">load</h1><h5 class="subheader">Mask.PBM.prototype.load()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {ArrayBuffer} </span><span class="name">array </span><span class="description">image data</span></li><li><strong>@param: </strong><span class="types"> {MaskCallback} </span><span class="name">callback </span></li></ul></div><div class="description"><p>Load an <code>ArrayBuffer</code> taken as a PBM image to a PBM mask.</p>
+
+<p>N.B. do not use the newly-initialized <code>Mask</code> directly until<br />the callback is called.</p></div><pre><code class="language-javascript">Mask.PBM.prototype.load = function (array, callback) {
     var bytes = new Uint8Array(array);
     if (bytes.byteLength &gt; 2) {
       if (bytes[0] === 'P'.charCodeAt(0)) {
         if (bytes[1] === '4'.charCodeAt(0)) {
           // This is a PBM binary file...
-          return mask.fromBinaryPBM(bytes, callback);
+          return fromBinaryPBM(this, bytes, callback);
         } else if (bytes[1] == &quot;1&quot;.charCodeAt(0)) {
-          // This is an ASCII binary file...
-          return mask.fromASCIIPBM(bytes, callback);
+          // This is a PBM ASCII file...
+          return fromASCIIPBM(this, bytes, callback);
         } else {
           // Unknown signature.
           return callback(null, new Error(&quot;Unknown PBM signature.&quot;));
@@ -84,80 +86,26 @@ code {
       // File too short.
       return callback(null, Error(&quot;Invalid PBM image.&quot;));
     }
-  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="fromASCIIPBM">fromASCIIPBM</h1><h5 class="subheader">mask.fromASCIIPBM()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {Uint8Buffer} </span><span class="name">bytes </span><span class="description">PBM image data.</span></li><li><strong>@param: </strong><span class="types"> {maskCallback} </span><span class="name">callback </span></li></ul></div><div class="description"><p>Create a mask from an Uint8Array taken semantically as an ASCII PBM image.</p></div><pre><code class="language-javascript">mask.fromASCIIPBM = function (bytes, callback) {
-    var bits = [];
-    var state = {index: 2};
-    // Skip the spaces and comments post-signature.
-    skipPostSignature(bytes, state);
-    var width = accumulateRegex(/\d/, bytes, state).join(&quot;&quot;);
-    skipRegex(/\s/, bytes, state);
-    // Read numbers and stick them into 'height' until whitespace.
-    var height = accumulateRegex(/\d/, bytes, state).join(&quot;&quot;);
-    skipRegex(/\s/, bytes, state);
-    // Create a mask.
-    var m = new mask();
-    m.w = parseInt(width, 10);
-    m.h = parseInt(height, 10);
-    // Read 0 and 1 until the end of the file, skipping everything else.
-    for (; state.index &lt; bytes.byteLength; state.index++) {
-      function add (x) {
-        if (!bits.length || bits[bits.length - 1].length === m.w) {
-          bits.push([]);
-        }
-        bits[bits.length - 1].push(x);
-      }
-      switch (bytes[state.index]) {
-      case '0'.charCodeAt(0):
-        add(false);
-        break;
-      case '1'.charCodeAt(0):
-        add(true);
-        break;
-      default:
-        break;
-      }
-    }
-    m.data = bits;
-    return callback(m);
-  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="fromBinaryPBM">fromBinaryPBM</h1><h5 class="subheader">mask.fromBinaryPBM()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {Uint8Buffer} </span><span class="name">bytes </span><span class="description">PBM image data.</span></li><li><strong>@param: </strong><span class="types"> {maskCallback} </span><span class="name">callback </span></li></ul></div><div class="description"><p>Create a <code>mask</code> from an Uint8Array taken semantically as an binary<br />PBM image.</p></div><pre><code class="language-javascript">mask.fromBinaryPBM = function (bytes, callback) {
-     var bits = [];
-    var state = {index: 2};
-    // Skip the spaces and comments post-signature.
-    skipPostSignature(bytes, state);
-    // Read numbers and stick them into 'width' until whitespace.
-    var width = accumulateRegex(/\d/, bytes, state).join(&quot;&quot;);
-    skipRegex(/\s/, bytes, state);
-    // Read numbers and stick them into 'height' until whitespace.
-    var height = accumulateRegex(/\d/, bytes, state).join(&quot;&quot;);
-    skipRegex(/\s/, bytes, state);
-    // Create a mask.
-    var m = new mask();
-    m.w = parseInt(width, 10);
-    m.h = parseInt(height, 10);
-    // Read each byte, in sequence.
-    for (; state.index &lt; bytes.byteLength; state.index++) {
-      if (bits.length === m.h - 1 &amp;&amp;
-          bits[bits.length - 1].length === m.w - 1) {
-        break;
-      }
-      else if (!bits.length || bits[bits.length - 1].length &gt;= m.w) {
-        bits.push([]);
-      }
-      for (var b = 0; b &lt; 8; b++) {
-        if (bits[bits.length - 1].length &lt; m.w) {
-          var bit = Boolean((bytes[state.index] &gt;&gt; (7 - b)) &amp; 0x01);
-          bits[bits.length - 1].push(bit);
-        }
-      }
-    }
-    m.data = bits;
-    callback(m);
-  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="fromPBMUrl">fromPBMUrl</h1><h5 class="subheader">mask.fromPBMUrl()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {String} </span><span class="name">url </span><span class="description">A URL pointing to a PBM image.</span></li><li><strong>@param: </strong><span class="types"> {maskCallback} </span><span class="name">callback </span></li></ul></div><div class="description"><p>Create a <code>mask</code> from a PBM image at some URL.</p></div><pre><code class="language-javascript">mask.fromPBMUrl = function (url, callback) {
+  };
+  Mask.PBM.prototype.clone = function () {
+    var other = new Mask.PBM();
+    other.x = this.x;
+    other.y = this.y;
+    other.w = this.w;
+    other.h = this.h;
+    other.data = this.data;
+    return other;
+  };
+  Mask.PBM.prototype.collidesAt = function (x, y) {
+    return !!this.data[x - this.x] &amp;&amp;
+      !!this.data[x - this.x][y - this.y];
+  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="url">url</h1><h5 class="subheader">Mask.PBM.url()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {String} </span><span class="name">url </span><span class="description">A URL pointing to a PBM image.</span></li><li><strong>@param: </strong><span class="types"> {MaskCallback} </span><span class="name">callback </span></li></ul></div><div class="description"><p>Create a <code>Mask</code> from a PBM image at some URL.</p></div><pre><code class="language-javascript">Mask.PBM.url = function (url, callback) {
     var req = new XMLHttpRequest();
     req.responseType = &quot;arraybuffer&quot;;
     req.onload = function (ev) {
       if (req.response) {
-        return mask.fromPBM(req.response, callback);
+        var m = new Mask.PBM();
+        return m.load(req.response, callback);
       } else {
         // No response.
         return callback(null, new Error(&quot;No response.&quot;));
@@ -168,17 +116,50 @@ code {
     };
     req.open(&quot;GET&quot;, url, true);
     req.send();
-  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="collision">collision</h1><h5 class="subheader">mask.collision()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {mask} </span><span class="name">a </span></li><li><strong>@param: </strong><span class="types"> {mask} </span><span class="name">b </span></li></ul></div><div class="description"><p>Test whether two masks collide.</p></div><pre><code class="language-javascript">mask.collision = function (a, b) {
+  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="collision">collision</h1><h5 class="subheader">Mask.collision()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {Mask} </span><span class="name">a </span></li><li><strong>@param: </strong><span class="types"> {Mask} </span><span class="name">b </span></li></ul></div><div class="description"><p>Test whether two Masks collide.</p></div><pre><code class="language-javascript">Mask.collision = function (a, b) {
     var intersect = intersection(a, b);
-    for (var x = intersect.x; x &lt; intersect.w; x++) {
-      for (var y = intersect.y; y &lt; intersect.h; y++) {
-        if (a.data[x - a.x][y - a.y] &amp;&amp;
-            b.data[x - b.x][y - b.y]) {
+    for (var x = intersect.x; x &lt; intersect.x + intersect.w; x++) {
+      for (var y = intersect.y; y &lt; intersect.y + intersect.h; y++) {
+        if (a.collidesAt(x, y) &amp;&amp;
+            b.collidesAt(x, y)) {
           return true;
         }
       }
     }
     return false;
+  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="Invert">Invert</h1><h5 class="subheader">Mask.Invert()</h5><div class="tags"><ul class="no-bullet"><li><strong>@constructor: </strong></li><li><strong>@param: </strong><span class="types"> {Mask} </span><span class="name">other </span></li></ul></div><div class="description"><p>Create a mask as an inversion of another.</p></div><pre><code class="language-javascript">Mask.Invert = function (other) {
+    this.x = other.x;
+    this.y = other.y;
+    this.w = other.w;
+    this.h = other.h;
+    this.inversion = other;
+  };
+  Mask.Invert.prototype = new Mask();
+  Mask.Invert.prototype.clone = function () {
+    var other = new Mask.Invert(this.inversion);
+    other.translate(this.x, this.y);
+    return other;
+  };
+  Mask.Invert.prototype.collidesAt = function (x, y) {
+    return !this.inversion.collidesAt(x, y);
+  };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="Box">Box</h1><h5 class="subheader">Mask.Box()</h5><div class="tags"><ul class="no-bullet"><li><strong>@constructor: </strong></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">w </span><span class="description">width</span></li><li><strong>@param: </strong><span class="types"> {Number} </span><span class="name">h </span><span class="description">height</span></li></ul></div><div class="description"><p>Create a vector box mask.</p></div><pre><code class="language-javascript">Mask.Box = function (w, h) {
+    this.x = 0;
+    this.y = 0;
+    this.w = w;
+    this.h = h;
+  };
+  Mask.Box.bounding = function (m) {
+    return new Mask.Box(m.w, m.h).at(m.x, m.y);
+  };
+  Mask.Box.prototype = new Mask();
+  Mask.Box.prototype.clone = function () {
+    var other = new Mask.Box(this.w, this.h);
+    other.translate(this.x, this.y);
+    return other;
+  };
+  Mask.Box.prototype.collidesAt = function (x, y) {
+    return x &gt;= this.x &amp;&amp; y &gt;= this.y &amp;&amp;
+      x &lt; (this.x + this.w) &amp;&amp; y &lt; (this.y + this.h);
   };</code></pre></div></div></div><!-- Foundation JS--><script src="http://cdnjs.cloudflare.com/ajax/libs/foundation/3.2.2/javascripts/foundation.min.js"></script><script>/**
  * Prism: Lightweight, robust, elegant syntax highlighting
  * MIT license http://www.opensource.org/licenses/mit-license.php/
