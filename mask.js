@@ -372,6 +372,9 @@ var Mask = (function () {
     this.w = w;
     this.h = h;
   };
+  Mask.Box.bounding = function (m) {
+    return new Mask.Box(m.w, m.h).at(m.x, m.y);
+  };
   Mask.Box.prototype = new Mask();
   Mask.Box.prototype.clone = function () {
     var other = new Mask.Box(this.w, this.h);

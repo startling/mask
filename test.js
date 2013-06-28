@@ -167,6 +167,19 @@ describe("Mask", function () {
              assert(box.within(box));
            });
          });
+      it("has every bounding box collide with its (nonempty) image",
+         function (done) {
+           pbm.filter(function (img) {
+             return !(/empty/).test(img);
+           }).forEach(function (img, index, arr) {
+             readMask(img, function (m) {
+               assert(Mask.collision(m, Mask.Box.bounding(m)));
+               if (index === arr.length - 1) {
+                 done();
+               }
+             });
+           });
+         });
     });
   });
   // ====================================================================
