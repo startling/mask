@@ -76,9 +76,8 @@ var Mask = (function () {
    * @api public
    */
   Mask.prototype.within = function (b) {
-    var intersect = intersection(this, b);
-    for (var x = intersect.x; x < intersect.w; x++) {
-      for (var y = intersect.y; y < intersect.h; y++) {
+    for (var x = this.x; x < this.w + this.x; x++) {
+      for (var y = this.y; y < this.h + this.y; y++) {
         if (this.collidesAt(x, y) &&
             !b.collidesAt(x, y)) {
           return false;
