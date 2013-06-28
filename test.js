@@ -180,6 +180,32 @@ describe("Mask", function () {
              });
            });
          });
+      it("has every nonempty image within its bounding box",
+         function (done) {
+           pbm.filter(function (img) {
+             return !(/empty/).test(img);
+           }).forEach(function (img, index, arr) {
+             readMask(img, function (m) {
+               assert(m.within(Mask.Box.bounding(m)));
+               if (index === arr.length - 1) {
+                 done();
+               }
+             });
+           });
+         });
+      it("has every nonempty image within its bounding box, translated",
+         function (done) {
+           pbm.filter(function (img) {
+             return !(/empty/).test(img);
+           }).forEach(function (img, index, arr) {
+             readMask(img, function (m) {
+               assert(m.within(Mask.Box.bounding(m).translated(m.w, m.h)));
+               if (index === arr.length - 1) {
+                 done();
+               }
+             });
+           });
+         });
       it("has every nonempty image not within a unit box at -1, -1",
          function (done) {
            var empty = new Mask.Box(1, 1).at(-1, -1);
