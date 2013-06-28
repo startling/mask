@@ -167,7 +167,7 @@ describe("Mask", function () {
              assert(box.within(box));
            });
          });
-      it("has every bounding box collide with its (nonempty) image",
+      it("has every nonempty image collide with its bounding box",
          function (done) {
            pbm.filter(function (img) {
              return !(/empty/).test(img);
