@@ -115,38 +115,6 @@ var Mask = (function () {
     this.data = [];
   };
   Mask.PBM.prototype = new Mask();
-  /** Load an `ArrayBuffer` taken as a PBM image to a PBM mask.
-   *
-   * N.B. do not use the newly-initialized `Mask` directly until
-   * the callback is called.
-   *
-   * @param {ArrayBuffer} array image data
-   * @param {MaskCallback} callback
-   * @api public
-   */
-  Mask.PBM.prototype.load = function (array, callback) {
-    var bytes = new Uint8Array(array);
-    if (bytes.byteLength > 2) {
-      if (bytes[0] === 'P'.charCodeAt(0)) {
-        if (bytes[1] === '4'.charCodeAt(0)) {
-          // This is a PBM binary file...
-          return fromBinaryPBM(this, bytes, callback);
-        } else if (bytes[1] == "1".charCodeAt(0)) {
-          // This is a PBM ASCII file...
-          return fromASCIIPBM(this, bytes, callback);
-        } else {
-          // Unknown signature.
-          return callback(null, new Error("Unknown PBM signature."));
-        }
-      } else {
-        // Unknown signature.
-        return callback(null, new Error("Unknown PBM signature."));
-      }
-    } else {
-      // File too short.
-      return callback(null, Error("Invalid PBM image."));
-    }
-  };
   Mask.PBM.prototype.clone = function () {
     var other = new Mask.PBM();
     other.x = this.x;
@@ -317,6 +285,38 @@ var Mask = (function () {
     };
     req.open("GET", url, true);
     req.send();
+  };
+  /** Load an `ArrayBuffer` taken as a PBM image to a PBM mask.
+   *
+   * N.B. do not use the newly-initialized `Mask` directly until
+   * the callback is called.
+   *
+   * @param {ArrayBuffer} array image data
+   * @param {MaskCallback} callback
+   * @api public
+   */
+  Mask.PBM.prototype.load = function (array, callback) {
+    var bytes = new Uint8Array(array);
+    if (bytes.byteLength > 2) {
+      if (bytes[0] === 'P'.charCodeAt(0)) {
+        if (bytes[1] === '4'.charCodeAt(0)) {
+          // This is a PBM binary file...
+          return fromBinaryPBM(this, bytes, callback);
+        } else if (bytes[1] == "1".charCodeAt(0)) {
+          // This is a PBM ASCII file...
+          return fromASCIIPBM(this, bytes, callback);
+        } else {
+          // Unknown signature.
+          return callback(null, new Error("Unknown PBM signature."));
+        }
+      } else {
+        // Unknown signature.
+        return callback(null, new Error("Unknown PBM signature."));
+      }
+    } else {
+      // File too short.
+      return callback(null, Error("Invalid PBM image."));
+    }
   };
   /** Create an object representing the intersection of the bounding
    * boxes of two objects.
