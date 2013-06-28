@@ -9,6 +9,11 @@
 var Mask = (function () {
   /** Construct a `Mask`.
    *
+   * Subclasses of `Mask` should implement, at the least, `collidesAt` and
+   * `clone`. All subclasses are expected to have the properties `x`, `y`,
+   * `w`, and `h` -- the coordinates, width, and height of a bounding box
+   * around the `Mask`.
+   *
    * Examples:
    * 
    *     new Mask()
@@ -20,6 +25,10 @@ var Mask = (function () {
     this.x = this.y = this.w = this.h = 0;
   }
   /** Make a clone of a `Mask`.
+   *
+   * Examples:
+   *
+   *     someMask.clone()
    *
    * @this {Mask}
    * @api public
@@ -34,9 +43,13 @@ var Mask = (function () {
   };
   /** Translate this `Mask` in two dimensions.
    *
+   * Examples:
+   *
+   *     someMask.translate(10, 10)
+   *
    * @this {Mask}
    * @param {Number} x x-distance
-   * @param {Number} y y-distancex
+   * @param {Number} y y-distance
    * @api public
    */
   Mask.prototype.translate = function (x, y) {
@@ -44,6 +57,10 @@ var Mask = (function () {
     this.y += y;
   };
   /** Make a copy of this `Mask` translated to the coordinates given.
+   *
+   * Examples:
+   *
+   *     someMask.at(10, 10)
    *
    * @this {Mask}
    * @param {Number} x x-coordinate
@@ -58,6 +75,11 @@ var Mask = (function () {
     return other;
   };
   /** Mask a copy of this `Mask` translated in two dimensions.
+   *
+   * Examples:
+   *
+   *     someMask.translated(10, 10)
+   *
    * @this {Mask}
    * @param {Number} x x-distance
    * @param {Number} y y-distance
@@ -70,6 +92,9 @@ var Mask = (function () {
     return other;
   };
   /** Test whether a Mask is completely contained within another.
+   * Examples:
+   *
+   *     someMask.within(new Mask.Box(10, 10))
    *
    * @this {Mask}
    * @param {Mask} b The containing Mask.
@@ -88,6 +113,10 @@ var Mask = (function () {
   };
   /** Test whether this mask collides at the given location.
    *
+   * Examples:
+   *
+   *     new Mask.Box(10, 10).collidesAt(5, 5)
+   *
    * @this {Mask}
    * @param {Number} x x-coordinate
    * @param {Number} y y-coordinate
@@ -97,12 +126,52 @@ var Mask = (function () {
   Mask.prototype.collidesAt = function (x, y) {
     return false;
   };
+  /** Create an object representing the intersection of the bounding
+   * boxes of two objects.
+   *
+   * @api private
+   */
+  function intersection (a, b) {
+    var a_2 = {x: a.x + a.w, y: a.y + a.h};
+    var b_2 = {x: b.x + b.w, y: b.y + b.h};
+    var overlap = {x: a.x > b.x ? a.x : b.x,
+                   y: a.y > b.y ? a.y : b.y};
+    overlap.w = (a_2.x < b_2.x ? a_2.x : b_2.x) - overlap.x;
+    overlap.h = (a_2.y < b_2.y ? a_2.y : b_2.y) - overlap.y;
+    return overlap;
+  }
+  /** Test whether two Masks collide.
+   *
+   * Examples:
+   *
+   *     Mask.collide(new Mask.Box(5, 5), new Mask.Box(10, 10))
+   *
+   * @param {Mask} a
+   * @param {Mask} b
+   * @api public
+   */
+  Mask.collision = function (a, b) {
+    var intersect = intersection(a, b);
+    for (var x = intersect.x; x < intersect.x + intersect.w; x++) {
+      for (var y = intersect.y; y < intersect.y + intersect.h; y++) {
+        if (a.collidesAt(x, y) &&
+            b.collidesAt(x, y)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
   /** Some callbacks expect a `Mask`.
    * @callback MaskCallback
    * @param {Mask} the collision map
    * @api private
    */
-  /**  Create an empty PBM mask.
+  /**  A mask taken from a PBM image.
+   *
+   * Examples:
+   *
+   *     new Mask.PBM.load(arrayBuffer, callback);
    *
    * @constructor
    * @api public
@@ -264,6 +333,10 @@ var Mask = (function () {
   };
   /** Create a `Mask` from a PBM image at some URL.
    *
+   * Examples:
+   *
+   *     Mask.PBM.url("http://example.com/mask.pbm", callback)
+   *
    * @param {String} url A URL pointing to a PBM image.
    * @param {MaskCallback} callback
    * @api public
@@ -290,6 +363,10 @@ var Mask = (function () {
    *
    * N.B. do not use the newly-initialized `Mask` directly until
    * the callback is called.
+   *
+   * Examples:
+   *
+   *     new Mask.PBM.load(arrayBuffer, callback);
    *
    * @param {ArrayBuffer} array image data
    * @param {MaskCallback} callback
@@ -318,42 +395,14 @@ var Mask = (function () {
       return callback(null, Error("Invalid PBM image."));
     }
   };
-  /** Create an object representing the intersection of the bounding
-   * boxes of two objects.
-   *
-   * @api private
-   */
-  function intersection (a, b) {
-    var a_2 = {x: a.x + a.w, y: a.y + a.h};
-    var b_2 = {x: b.x + b.w, y: b.y + b.h};
-    var overlap = {x: a.x > b.x ? a.x : b.x,
-                   y: a.y > b.y ? a.y : b.y};
-    overlap.w = (a_2.x < b_2.x ? a_2.x : b_2.x) - overlap.x;
-    overlap.h = (a_2.y < b_2.y ? a_2.y : b_2.y) - overlap.y;
-    return overlap;
-  }
-  /** Test whether two Masks collide.
-   *
-   * @param {Mask} a
-   * @param {Mask} b
-   * @api public
-   */
-  Mask.collision = function (a, b) {
-    var intersect = intersection(a, b);
-    for (var x = intersect.x; x < intersect.x + intersect.w; x++) {
-      for (var y = intersect.y; y < intersect.y + intersect.h; y++) {
-        if (a.collidesAt(x, y) &&
-            b.collidesAt(x, y)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
   /** Create a mask as an inversion of another.
    *
+   * Examples:
+   *
+   *     new Mask.Invert(other)
+   *
    * @constructor
-   * @param {Mask} other
+   * @param {Mask} other the mask to invert.
    * @api public
    */
   Mask.Invert = function (other) {
@@ -372,7 +421,11 @@ var Mask = (function () {
   Mask.Invert.prototype.collidesAt = function (x, y) {
     return !this.inversion.collidesAt(x, y);
   };
-  /** Create a vector box mask.
+  /** Masks representing vector boxes.
+   *
+   * Examples:
+   *
+   *     new Mask.Box(10, 10)
    *
    * @constructor
    * @param {Number} w width
@@ -385,9 +438,6 @@ var Mask = (function () {
     this.w = w;
     this.h = h;
   };
-  Mask.Box.bounding = function (m) {
-    return new Mask.Box(m.w, m.h).at(m.x, m.y);
-  };
   Mask.Box.prototype = new Mask();
   Mask.Box.prototype.clone = function () {
     var other = new Mask.Box(this.w, this.h);
@@ -397,6 +447,19 @@ var Mask = (function () {
   Mask.Box.prototype.collidesAt = function (x, y) {
     return x >= this.x && y >= this.y &&
       x < (this.x + this.w) && y < (this.y + this.h);
+  };
+  /* Get a mask representing a bounding box of some other mask.
+   *
+   * Examples:
+   *
+   *     Mask.Box.bounding(someMask)
+   *
+   * @param {Mask} m
+   * @return {Mask.Box}
+   * @api public
+   */
+  Mask.Box.bounding = function (m) {
+    return new Mask.Box(m.w, m.h).at(m.x, m.y);
   };
   /*!*/
   if (typeof module !== "undefined") {
