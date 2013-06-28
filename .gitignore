@@ -1,2 +1,3 @@
 test-data/*.pbm
+node_modules/*
 *.html
