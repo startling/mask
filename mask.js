@@ -144,7 +144,7 @@ var Mask = (function () {
    *
    * Examples:
    *
-   *     Mask.collide(new Mask.Box(5, 5), new Mask.Box(10, 10))
+   *     Mask.collision(new Mask.Box(5, 5), new Mask.Box(10, 10))
    *
    * @param {Mask} a
    * @param {Mask} b
