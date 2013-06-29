@@ -36,9 +36,10 @@ readMask("test-data/frame-10-10-ascii.pbm",
 readBoth("test-data/frame-10-10-ascii.pbm",
          "test-data/dot-10-10-ascii.pbm",
          function (a_, b_) {
-           new Benchmark.Suite().add("Mask.collision", function () {
+           new Benchmark.Suite().add("Mask.PBM#collidesAt", function () {
              Mask.collision(a_, b_);
            }).on("cycle", function (event) {
              console.log(String(event.target));
            }).run();
          });
+

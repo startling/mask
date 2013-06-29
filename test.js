@@ -101,13 +101,7 @@ describe("Mask", function () {
          readBoth("test-data/bullet-10-10-ascii.pbm",
                   "test-data/bullet-10-10-binary.pbm",
                   function(a_, b_) {
-                    assert.equal(a_.w, b_.w);
-                    assert.equal(a_.h, b_.h);
-                    for (var x = 0; x < a_.w; x++) {
-                      for (var y = 0; y < a_.h; y++) {
-                        assert.equal(a_.data[x][y], b_.data[x][y]);
-                      }
-                    }
+                    assert.deepEqual(a_.data, b_.data);
                     done();
                   });
        });
