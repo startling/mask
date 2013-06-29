@@ -7,6 +7,7 @@
  */
 /*!*/
 var Mask = (function () {
+  "use strict";
   /** Construct a `Mask`.
    *
    * Subclasses of `Mask` should implement, at the least, `collidesAt` and
@@ -256,7 +257,7 @@ var Mask = (function () {
    * @param {MaskCallback} callback
    * @api private
    */
-  fromASCIIPBM = function (m, bytes, callback) {
+  var fromASCIIPBM = function (m, bytes, callback) {
     var state = {index: 2};
     // Skip the spaces and comments post-signature.
     skipPostSignature(bytes, state);
@@ -299,7 +300,7 @@ var Mask = (function () {
    * @param {MaskCallback} callback
    * @api private
    */
-  fromBinaryPBM = function (m, bytes, callback) {
+  var fromBinaryPBM = function (m, bytes, callback) {
     var bits = [];
     var state = {index: 2};
     // Skip the spaces and comments post-signature.
@@ -380,7 +381,7 @@ var Mask = (function () {
         if (bytes[1] === '4'.charCodeAt(0)) {
           // This is a PBM binary file...
           return fromBinaryPBM(this, bytes, callback);
-        } else if (bytes[1] == "1".charCodeAt(0)) {
+        } else if (bytes[1] === "1".charCodeAt(0)) {
           // This is a PBM ASCII file...
           return fromASCIIPBM(this, bytes, callback);
         } else {
