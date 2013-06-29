@@ -84,12 +84,12 @@ describe("Mask", function () {
             var height = parseInt(match[2], 10);
             readMask(img, function (m) {
               // N.B. all the test data is 10x10.
-              assert.equal(m.h, width,
+              assert.equal(m.h, height,
                            "the mask from " + img +
-                           "'s height is not " + height);
-              assert.equal(m.w, height,
+                           "'s height is " + m.h + ", not " + height);
+              assert.equal(m.w, width,
                            "the mask from " + img +
-                           "'s width is not " + width);
+                           "'s width is " + m.w + ",  not " + width);
               if (index === pbm.length - 1) {
                 done();
               }
