@@ -91,7 +91,7 @@ code {
 
 <h2>Examples</h2>
 
-<pre><code>Mask.collide(new Mask.Box(5, 5), new Mask.Box(10, 10))
+<pre><code>Mask.collision(new Mask.Box(5, 5), new Mask.Box(10, 10))
 </code></pre></div><pre><code class="language-javascript">Mask.collision = function (a, b) {
     var intersect = intersection(a, b);
     for (var x = intersect.x; x &lt; intersect.x + intersect.w; x++) {
@@ -135,7 +135,6 @@ code {
 <pre><code>Mask.PBM.url("<a href='http://example.com/mask.pbm'>http://example.com/mask.pbm</a>", callback)
 </code></pre></div><pre><code class="language-javascript">Mask.PBM.url = function (url, callback) {
     var req = new XMLHttpRequest();
-    req.responseType = &quot;arraybuffer&quot;;
     req.onload = function (ev) {
       if (req.response) {
         var m = new Mask.PBM();
@@ -149,6 +148,7 @@ code {
       return callback(null, e);
     };
     req.open(&quot;GET&quot;, url, true);
+    req.responseType = &quot;arraybuffer&quot;;
     req.send();
   };</code></pre></div><div class="comment"><div class="label radius ctx-type">method</div><h1 id="load">load</h1><h5 class="subheader">Mask.PBM.prototype.load()</h5><div class="tags"><ul class="no-bullet"><li><strong>@param: </strong><span class="types"> {ArrayBuffer} </span><span class="name">array </span><span class="description">image data</span></li><li><strong>@param: </strong><span class="types"> {MaskCallback} </span><span class="name">callback </span></li></ul></div><div class="description"><p>Load an <code>ArrayBuffer</code> taken as a PBM image to a PBM mask.</p>
 
