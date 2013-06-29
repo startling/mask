@@ -64,6 +64,10 @@ readBoth(frame, dot, function (frame_, dot_) {
       Mask.collision(new Mask.Box(2, 2).at(2, 2),
                      new Mask.Box(4, 4));
     }).
+    add("Mask.collision [6/6@12/12, 6/6@0/0 ]", function () {
+      Mask.collision(new Mask.Box(6, 6).at(12, 12),
+                     new Mask.Box(6, 6));
+    }).
     on("cycle", function (event) {
      console.log(event.target.toString());
     }).
