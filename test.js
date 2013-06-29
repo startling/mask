@@ -111,6 +111,75 @@ describe("Mask", function () {
                     done();
                   });
        });
+    it("reads 'test-data/commented'", function (done) {
+      readMask("test-data/commented-1-1-ascii.pbm",
+               function (m) {
+                 assert.deepEqual(m.data, [[true]]);
+                 done();
+               });
+    });
+    it("reads 'test-data/dot'", function (done) {
+      readMask("test-data/dot-10-10-ascii.pbm", function (m) {
+        assert.deepEqual(m.data,
+                         [[false, false, false, false, false,
+                           false, false, false, false, false],
+                          [false, false, false, false, false,
+                           false, false, false, false, false],
+                          [false, false, false, false, false,
+                           false, false, false, false, false],
+                          [false, false, false, false, false,
+                           false, false, false, false, false],
+                          [false, false, false, false, false,
+                           false, false, false, false, false],
+                          [false, false, false, false, false,
+                           false, false, false, false, false],
+                          [false, false, false, false, false,
+                           false, false, false, false, false],
+                          [false, false, false, false, false,
+                           false, false, false, false, false],
+                          [false, false, false, false, false,
+                           false, false, false, false, false],
+                          [false, false, false, false, false,
+                           false, false, false, false, true]]);
+        done();
+      });
+    });
+    it("reads 'test-data/block'", function (done) {
+      readMask("test-data/block-14-15-ascii.pbm", function (m) {
+        assert.deepEqual(m.data,
+                         [[false, false, false, false, false, false, false,
+                           false, false, false, false, false, false, false],
+                          [false, false, false, false, false, false, false,
+                           false, false, false, false, false, false, false],
+                          [false, false, false, false, false, false, false,
+                           false, false, false, false, false, false, false],
+                          [false, false, false, false, false, false, false,
+                           false, false, false, false, false, false, false],
+                          [false, false, false, false, false, false, false,
+                           false, false, false, false, false, false, false],
+                          [false, false, false, false, true,  true,  true,
+                           true,  true,  true,  false, false, false, false],
+                          [false, false, false, false, true,  true,  true,
+                           true,  true,  true,  false, false, false, false],
+                          [false, false, false, false, true,  true,  false,
+                           true,  false, true,  false, false, false, false],
+                          [false, false, false, false, true,  true,  true,
+                           true,  true,  true,  false, false, false, false],
+                          [false, false, false, false, true,  true,  true,
+                           true,  true,  true,  false, false, false, false],
+                          [false, false, false, false, false, false, false,
+                           false, false, false, false, false, false, false],
+                          [false, false, false, false, false, false, false,
+                           false, false, false, false, false, false, false],
+                          [false, false, false, false, false, false, false,
+                           false, false, false, false, false, false, false],
+                          [false, false, false, false, false, false, false,
+                           false, false, false, false, false, false, false],
+                          [false, false, false, false, false, false, false,
+                           false, false, false, false, false, false, false]]);
+        done();
+      });
+    });
     describe("#collidesAt", function () {
       it("does not have the bullet and the frame collide.",
          function (done) {
