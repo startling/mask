@@ -268,7 +268,7 @@ var Mask = (function () {
     // Initialize the mask.
     m.w = parseInt(width, 10);
     m.h = parseInt(height, 10);
-    m.data = []
+    m.data = [];
     // Read 0 and 1 until the end of the file, skipping everything else.
     for (var y = 0; y < m.h; y++) {
       var row = [];
@@ -285,7 +285,7 @@ var Mask = (function () {
           } else if (here === '1') {
             row.push(true);
             break;
-          };
+          }
         }
       }
       m.data.push(row);
