@@ -35,7 +35,7 @@ readMask("test-data/frame-10-10-ascii.pbm",
 
 var frame = "test-data/frame-10-10-ascii.pbm";
 var dot = "test-data/dot-10-10-ascii.pbm";
-readBoth(frame, dot, function (frame_, dot_) {5
+readBoth(frame, dot, function (frame_, dot_) {
   new Benchmark.Suite().
     add("Mask.collision [frame@0/0, dot@0/0 ]", function () {
       Mask.collision(frame_, dot_);
