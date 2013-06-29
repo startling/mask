@@ -270,9 +270,9 @@ var Mask = (function () {
     m.h = parseInt(height, 10);
     m.data = []
     // Read 0 and 1 until the end of the file, skipping everything else.
-    for (var x = 0; x < m.w; x++) {
+    for (var y = 0; y < m.h; y++) {
       var row = [];
-      for (var y = 0; y < m.h; y++) {
+      for (var x = 0; x < m.w; x++) {
         if (state.index >= bytes.byteLength) {
           break;
         }
