@@ -1,0 +1,6 @@
+before_install:
+  - sudo apt-get install netpbm
+language: node_js
+node_js:
+  - "0.10"
+  - "0.11"
