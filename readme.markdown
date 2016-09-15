@@ -46,7 +46,3 @@ well-commented and not difficult; might as well take a look.
 
 Pull requests are welcome; tests and jslint compliance are
 appreciated.
-
-You could also [toss me a few dollars][].
-
-[toss me a few dollars]: https://www.gittip.com/startling/
